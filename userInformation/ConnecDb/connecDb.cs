@@ -6,7 +6,7 @@ namespace userInformation.ConnecDb
     public class connecDb
     {
         string connectionstring = "Server=localhost;Database=userinformaation;Uid=root;Pwd=1234;";
-        public String connectDb() {
+        public string connectDb() {
             string connectionString = "Server=myServerAddress;Database=myDataBase;Uid=myUsername;Pwd=myPassword;";
             return connectionString;
         }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\jukri\\OneDrive\\เดสก์ท็อป\\c#\\userInformation\\userInformation.csproj": {}
+    "C:\\Users\\jukri\\OneDrive\\เดสก์ท็อป\\UsersInformation\\userInformation\\userInformation.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jukri\\OneDrive\\เดสก์ท็อป\\c#\\userInformation\\userInformation.csproj": {
+    "C:\\Users\\jukri\\OneDrive\\เดสก์ท็อป\\UsersInformation\\userInformation\\userInformation.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jukri\\OneDrive\\เดสก์ท็อป\\c#\\userInformation\\userInformation.csproj",
+        "projectUniqueName": "C:\\Users\\jukri\\OneDrive\\เดสก์ท็อป\\UsersInformation\\userInformation\\userInformation.csproj",
         "projectName": "userInformation",
-        "projectPath": "C:\\Users\\jukri\\OneDrive\\เดสก์ท็อป\\c#\\userInformation\\userInformation.csproj",
+        "projectPath": "C:\\Users\\jukri\\OneDrive\\เดสก์ท็อป\\UsersInformation\\userInformation\\userInformation.csproj",
         "packagesPath": "C:\\Users\\jukri\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jukri\\OneDrive\\เดสก์ท็อป\\c#\\userInformation\\obj\\",
+        "outputPath": "C:\\Users\\jukri\\OneDrive\\เดสก์ท็อป\\UsersInformation\\userInformation\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\jukri\\AppData\\Roaming\\NuGet\\NuGet.Config",

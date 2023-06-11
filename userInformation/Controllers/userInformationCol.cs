@@ -7,11 +7,11 @@ using System.Data;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using static System.Net.Mime.MediaTypeNames;
 using System.Xml.Linq;
+using MySql.Data.MySqlClient;
 
 namespace userInformation.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
+    
     public class userInformationCol : ControllerBase
     {
         connecDb conn = new connecDb();
@@ -52,7 +52,7 @@ namespace userInformation.Controllers
         }
 
         [HttpGet]
-        [Route("GetbyId/{id}")]
+        [Route("api/GetbyId/{id}")]
         public UsersinforModels GetbyId(int id)
         {
             List<myParam> param = new List<myParam>();
@@ -85,46 +85,78 @@ namespace userInformation.Controllers
             return user;
         }
 
-        [HttpGet]
-        [Route("GetAllPrivileage/privileage")]
-        public UsersinforAndPrivileageModels GetAllPrivileage()
+        //[HttpGet]
+        //[Route("GetAllPrivileage/privileage")]
+        //public UsersinforAndPrivileageModels GetAllPrivileage()
+        //{
+
+        //    UsersinforAndPrivileageModels uap = new UsersinforAndPrivileageModels();
+        //    myParam p = new myParam();
+
+        //    try
+        //    {
+
+        //        DataSet ds = new DataSet();
+        //        ds = conn.Selectdata("SELECT * FROM users INNER JOIN privileage ON privileage.usersId = users.usersId;");
+
+
+        //        foreach (DataRow dr in ds.Tables[0].Rows)
+        //        {
+        //            uap = new UsersinforAndPrivileageModels()
+        //            {
+        //                u_usersId = int.Parse(dr[0].ToString()),
+        //                username = dr[1].ToString(),
+        //                password = (byte[])dr[2],
+        //                name = dr[3].ToString(),
+        //                status = dr[4].ToString(),
+        //                privileageId = int.Parse(dr[5].ToString()),
+        //                p_usersId = int.Parse(dr[6].ToString()),
+        //                read = Boolean.Parse(dr[7].ToString()),
+        //                insert = Boolean.Parse(dr[8].ToString()),
+        //                update = Boolean.Parse(dr[9].ToString()),
+        //                delete = Boolean.Parse(dr[10].ToString()),
+        //            };
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //    }
+        //    return uap;
+        //}
+
+        [HttpPost]
+        [Route("api/InsertUsers")]
+        public NewUsersinforModels InsertImage(NewUsersinforModels data)
         {
-
-            UsersinforAndPrivileageModels uap = new UsersinforAndPrivileageModels();
-            myParam p = new myParam();
-
             try
             {
-
-                DataSet ds = new DataSet();
-                ds = conn.Selectdata("SELECT * FROM users INNER JOIN privileage ON privileage.usersId = users.usersId;");
-
-
-                foreach (DataRow dr in ds.Tables[0].Rows)
-                {
-                    uap = new UsersinforAndPrivileageModels()
-                    {
-                        u_usersId = int.Parse(dr[0].ToString()),
-                        username = dr[1].ToString(),
-                        password = (byte[])dr[2],
-                        name = dr[3].ToString(),
-                        status = dr[4].ToString(),
-                        privileageId = int.Parse(dr[5].ToString()),
-                        p_usersId = int.Parse(dr[6].ToString()),
-                        read = Boolean.Parse(dr[7].ToString()),
-                        insert = Boolean.Parse(dr[8].ToString()),
-                        update = Boolean.Parse(dr[9].ToString()),
-                        delete = Boolean.Parse(dr[10].ToString()),
-                    };
-                }
+                List<myParam> param = new List<myParam>();
+                myParam p = new myParam();
+                MySqlConnection connection = new MySqlConnection("Server=localhost;Database=userinformaation;Uid=root;Pwd=1234;");
+                connection.Open();
+                string sql = "INSERT into usres set username=@username,password=@password,name=@name,status=@status;";
+                MySqlCommand comm = new MySqlCommand(sql, connection);
+                comm.Parameters.AddWithValue("@username", data.username);
+                comm.Parameters.AddWithValue("@password", data.password);
+                //Console.WriteLine(data.image.Length.ToString());
+                comm.Parameters.AddWithValue("@name", data.name);
+                comm.Parameters.AddWithValue("@status", data.status);
+                //cc.Setdata(sql, comm);
+                comm.ExecuteNonQuery();
+                connection.Close();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            return uap;
+            return new NewUsersinforModels
+            {
+                username = data.username,
+                password = data.password,
+                name = data.name,
+                status = data.status,
+            };
         }
-
-        
     }
 }
