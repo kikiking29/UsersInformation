@@ -209,7 +209,7 @@ namespace userInformation.Controllers
 
                 MySqlConnection connection = new MySqlConnection(conn.connectDb());
                 connection.Open();
-                string sql = "UPDATE users SET password=@password  WHERE usersId=@usersId ;";
+                string sql = "UPDATE users SET password==CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@password)))))  WHERE usersId=@usersId ;";
                 MySqlCommand comm = new MySqlCommand(sql, connection);
                 comm.Parameters.AddWithValue("@usersId", data.usersId);
                 comm.Parameters.AddWithValue("@password", data.password);
@@ -242,5 +242,26 @@ namespace userInformation.Controllers
 
 
         }
+
+        //[HttpGet]
+        //[Route("Usersinformation/GetoldPassword/{id}")]
+        //public PasswordModels GetoldPassword(int id)
+        //{
+        //    PasswordModels pass = new PasswordModels();
+        //    DataSet ds = new DataSet();
+
+        //    try
+        //    {   
+        //        ds = conn.GetOldPassword(id);
+        //        foreach (DataRow dr in ds.Tables[0].Rows)
+        //        {pass = new PasswordModels(){password = (byte[])dr["password"]};}
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //    }
+        //    return pass;
+        //}
     }
 }

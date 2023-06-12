@@ -46,6 +46,21 @@ namespace userInformation.ConnecDb
             return ds;
         }
 
+        public DataSet GetOldPassword(int id)
+        {
+            MySqlConnection connection = new MySqlConnection(connectionstring);
+            DataSet ds = new DataSet();
+            connection.Open();
+            string sql = "SELECT password FROM users WHERE usersId='"+id+"';";
+            
 
+            MySqlDataAdapter dap = new MySqlDataAdapter(sql, connection);
+
+            //select
+            dap.Fill(ds);
+
+            connection.Close();
+            return ds;
+        }
     }
 }
