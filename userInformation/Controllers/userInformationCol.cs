@@ -243,12 +243,6 @@ namespace userInformation.Controllers
 
         }
 
-        //[HttpGet]
-        //[Route("Usersinformation/GetoldPassword/{id}")]
-        //public PasswordModels GetoldPassword(int id)
-        //{
-        //    PasswordModels pass = new PasswordModels();
-        //    DataSet ds = new DataSet();
 
         //    try
         //    {   
