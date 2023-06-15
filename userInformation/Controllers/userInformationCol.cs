@@ -36,7 +36,7 @@ namespace userInformation.Controllers
                     {
                         usersId = int.Parse(dr["usersId"].ToString()),
                         username = dr["username"].ToString(),
-                        password = (byte[])dr["password"],
+                        password = dr["passwrd"].ToString(),
                         name = dr["name"].ToString(),
                         status = dr["status"].ToString()
 
@@ -71,7 +71,7 @@ namespace userInformation.Controllers
                     {
                         usersId = int.Parse(dr["usersId"].ToString()),
                         username = dr["username"].ToString(),
-                        password = (byte[])dr["password"],
+                        password = dr["passwrd"].ToString(),
                         name = dr["name"].ToString(),
                         status = dr["status"].ToString()
 
@@ -105,7 +105,7 @@ namespace userInformation.Controllers
                     {
                         u_usersId = int.Parse(dr["usersId"].ToString()),
                         username = dr["username"].ToString(),
-                        password = (byte[])dr["password"],
+                        password = (byte[])dr["passwrd"],
                         name = dr["name"].ToString(),
                         status = dr["status"].ToString(),
                         privileageId = int.Parse(dr["privileageId"].ToString()),
@@ -135,7 +135,7 @@ namespace userInformation.Controllers
                 myParam p = new myParam();
                 MySqlConnection connection = new MySqlConnection(conn.connectDb());
                 connection.Open();
-                string sql = "INSERT into users set username=@username,password=@password,name=@name,status=@status;";
+                string sql = "INSERT into users set username=@username,passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@password))))),name=@name,status=@status;";
                 MySqlCommand comm = new MySqlCommand(sql, connection);
                 comm.Parameters.AddWithValue("@username", data.username);
                 comm.Parameters.AddWithValue("@password", data.password);
@@ -170,7 +170,7 @@ namespace userInformation.Controllers
 
                 MySqlConnection connection = new MySqlConnection(conn.connectDb());
                 connection.Open();
-                string sql = "UPDATE users SET username=@username,password=@password,name=@name,status=@status  WHERE usersId=@usersId ;";
+                string sql = "UPDATE users SET username=@username,passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@password))))),name=@name,status=@status  WHERE usersId=@usersId ;";
                 MySqlCommand comm = new MySqlCommand(sql, connection);
                 comm.Parameters.AddWithValue("@usersId", data.usersId);
                 comm.Parameters.AddWithValue("@username", data.username);
@@ -199,19 +199,19 @@ namespace userInformation.Controllers
 
 
         [HttpPut]
-        [Route("UsersInformation/{id}/password")]
+        [Route("UsersInformation/username/password")]
         public PasswordModels UpdatetoPassword(PasswordModels data)
         {
-            PasswordModels user = new PasswordModels();
+            PasswordModels pass = new PasswordModels();
             connecDb conn = new connecDb();
             try
             {
-
+                pass = conn.ChackPassword(data);
                 MySqlConnection connection = new MySqlConnection(conn.connectDb());
                 connection.Open();
-                string sql = "UPDATE users SET password==CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@password)))))  WHERE usersId=@usersId ;";
+                string sql = "UPDATE users SET passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@password)))))  WHERE usersId='"+pass.usersId+"' AND passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1('"+pass.old_password+"'))))) ;";
                 MySqlCommand comm = new MySqlCommand(sql, connection);
-                comm.Parameters.AddWithValue("@usersId", data.usersId);
+                
                 comm.Parameters.AddWithValue("@password", data.password);
                 comm.ExecuteNonQuery();
                 connection.Close();
@@ -227,35 +227,50 @@ namespace userInformation.Controllers
             };
         }
 
-        [HttpDelete]
-        [Route("UsersInformation/{id}")]
-        public void Delete(int id)
+        [HttpGet]
+        [Route("Usersinformation/username/passwrd")]
+        public PasswordModels getIduserfromUsernameandPrassword(PasswordModels data)
         {
+            PasswordModels pass = new PasswordModels();
+
             try
             {
+                pass = conn.ChackPassword(data);
 
-                string sql = "DELETE FROM users WHERE usersId ='" + id + "'  ;";
-                conn.Setdata(sql);
             }
             catch (Exception ex)
-            { Console.WriteLine(ex.Message); }
-
-
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return pass;
         }
 
 
-        //    try
-        //    {   
-        //        ds = conn.GetOldPassword(id);
-        //        foreach (DataRow dr in ds.Tables[0].Rows)
-        //        {pass = new PasswordModels(){password = (byte[])dr["password"]};}
 
+
+
+
+
+
+
+
+        //[HttpDelete]
+        //[Route("UsersInformation/{id}")]
+        //public void Delete(int id)
+        //{
+        //    try
+        //    {
+
+        //        string sql = "DELETE FROM users WHERE usersId ='" + id + "'  ;";
+        //        conn.Setdata(sql);
         //    }
         //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //    }
-        //    return pass;
+        //    { Console.WriteLine(ex.Message); }
+
+
         //}
+
+
+
     }
 }

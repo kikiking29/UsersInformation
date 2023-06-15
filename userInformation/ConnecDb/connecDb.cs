@@ -5,9 +5,9 @@ namespace userInformation.ConnecDb
 {
     public class connecDb
     {
-        string connectionstring = "Server=localhost;Database=userinformation;Uid=root;Pwd=1234;";
+        string connectionstring = "Server=localhost;Database=userinformaation;Uid=root;Pwd=1234;";
         public string connectDb() {
-            string connectionString = "Server=localhost;Database=userinformation;Uid=root;Pwd=1234;";
+            string connectionString = "Server=localhost;Database=userinformaation;Uid=root;Pwd=1234;";
             return connectionString;
         }
 
@@ -46,21 +46,27 @@ namespace userInformation.ConnecDb
             return ds;
         }
 
-        public DataSet GetOldPassword(int id)
+        public PasswordModels ChackPassword(PasswordModels data)
         {
+            PasswordModels passwrd = new PasswordModels(); 
             MySqlConnection connection = new MySqlConnection(connectionstring);
             DataSet ds = new DataSet();
             connection.Open();
-            string sql = "SELECT password FROM users WHERE usersId='"+id+"';";
-            
-
-            MySqlDataAdapter dap = new MySqlDataAdapter(sql, connection);
+            string Sql = "SELECT usersId FROM users where username='"+data.username+"'AND passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1('"+data.old_password+"')))));";
+            MySqlDataAdapter dap = new MySqlDataAdapter(Sql, connection);
 
             //select
             dap.Fill(ds);
-
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                passwrd = new PasswordModels()
+                {
+                    usersId = int.Parse(dr["usersId"].ToString()),
+                    old_password = data.old_password,
+                };
+            }
             connection.Close();
-            return ds;
+            return passwrd;
         }
     }
 }
