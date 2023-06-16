@@ -62,7 +62,6 @@ namespace userInformation.ConnecDb
                 passwrd = new PasswordModels()
                 {
                     usersId = int.Parse(dr["usersId"].ToString()),
-                    old_password = data.old_password,
                 };
             }
             connection.Close();

@@ -54,9 +54,7 @@ namespace userInformation.Controllers
         [Route("Usersinformation/{id}")]
         public UsersinforModels GetbyId(int id)
         {
-            List<myParam> param = new List<myParam>();
             UsersinforModels user = new UsersinforModels();
-            myParam p = new myParam();
             
             try
             {
@@ -86,26 +84,25 @@ namespace userInformation.Controllers
 
         [HttpGet]
         [Route("Usersinformation/privileage")]
-        public UsersinforAndPrivileageModels GetAllPrivileage()
+        public List<UsersinforAndPrivileageModels> GetAllPrivileage()
         {
-
-            UsersinforAndPrivileageModels uap = new UsersinforAndPrivileageModels();
-            myParam p = new myParam();
+            List<UsersinforAndPrivileageModels> uaps = new List<UsersinforAndPrivileageModels>();
+            
 
             try
             {
 
                 DataSet ds = new DataSet();
-                ds = conn.Selectdata("SELECT * FROM users LEFT JOIN privileage ON privileage.usersId = users.usersId;");
+                ds = conn.Selectdata("SELECT * FROM users  JOIN privileage ON privileage.usersId = users.usersId;");
 
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    uap = new UsersinforAndPrivileageModels()
+                    UsersinforAndPrivileageModels uap = new UsersinforAndPrivileageModels()
                     {
                         u_usersId = int.Parse(dr["usersId"].ToString()),
                         username = dr["username"].ToString(),
-                        password = (byte[])dr["passwrd"],
+                        password = dr["passwrd"].ToString(),
                         name = dr["name"].ToString(),
                         status = dr["status"].ToString(),
                         privileageId = int.Parse(dr["privileageId"].ToString()),
@@ -116,13 +113,14 @@ namespace userInformation.Controllers
                         candelete = dr["candelete"].ToString(),
                         candrop = dr["candrop"].ToString(),
                     };
+                    uaps.Add(uap);
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            return uap;
+            return uaps;
         }
 
         [HttpPost]

@@ -86,24 +86,25 @@ namespace userInformation.Controllers
             return privileage;
         }
 
+
         [HttpGet]
         [Route("privileage/Usersinformation")]
-        public UsersinforAndPrivileageModels GetAllPrivileage()
+        public List<PrivileageAndUsersinforModels> GetAllPrivileage()
         {
 
-            UsersinforAndPrivileageModels pau = new UsersinforAndPrivileageModels();
+            List<PrivileageAndUsersinforModels> paus = new List<PrivileageAndUsersinforModels>();
             myParam p = new myParam();
 
             try
             {
 
                 DataSet ds = new DataSet();
-                ds = conn.Selectdata("SELECT * FROM  privileage LEFT JOIN  users ON privileage.usersId = users.usersId;");
+                ds = conn.Selectdata("SELECT * FROM  privileage  JOIN  users ON privileage.usersId = users.usersId;");
 
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    pau = new UsersinforAndPrivileageModels()
+                    PrivileageAndUsersinforModels pau = new PrivileageAndUsersinforModels()
                     {
                         
                         privileageId = int.Parse(dr["privileageId"].ToString()),
@@ -115,77 +116,112 @@ namespace userInformation.Controllers
                         candrop = dr["candrop"].ToString(),
                         u_usersId = int.Parse(dr["usersId"].ToString()),
                         username = dr["username"].ToString(),
-                        password = (byte[])dr["passwrd"],
+                        password = dr["passwrd"].ToString(),
                         name = dr["name"].ToString(),
                         status = dr["status"].ToString(),
                     };
+                    paus.Add(pau);
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            return pau;
+            return paus;
         }
 
-        //[HttpPost]
-        //[Route("UsersInformation")]
-        //public NewUsersinforModels InsertImage(NewUsersinforModels data)
-        //{
-        //    try
-        //    {
-        //        List<myParam> param = new List<myParam>();
-        //        myParam p = new myParam();
-        //        MySqlConnection connection = new MySqlConnection(conn.connectDb());
-        //        connection.Open();
-        //        string sql = "INSERT into users set username=@username,passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@password))))),name=@name,status=@status;";
-        //        MySqlCommand comm = new MySqlCommand(sql, connection);
-        //        comm.Parameters.AddWithValue("@username", data.username);
-        //        comm.Parameters.AddWithValue("@password", data.password);
-        //        //Console.WriteLine(data.image.Length.ToString());
-        //        comm.Parameters.AddWithValue("@name", data.name);
-        //        comm.Parameters.AddWithValue("@status", data.status);
-        //        //cc.Setdata(sql, comm);
-        //        comm.ExecuteNonQuery();
-        //        connection.Close();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //    }
-        //    return new NewUsersinforModels
-        //    {
-        //        username = data.username,
-        //        password = data.password,
-        //        name = data.name,
-        //        status = data.status,
-        //    };
-        //}
+        [HttpPost]
+        [Route("Privileage")]
+        public NewPrivileageModels InsertImage(NewPrivileageModels data)
+        {
+            try
+            {
+                
+                MySqlConnection connection = new MySqlConnection(conn.connectDb());
+                connection.Open();
+                string sql = "INSERT into privileage set usersId=@usersId,canread=@canread,caninsert=@caninsert,canupdate=@canupdate,candelete=@candelete,candrop=@candrop;";
+                MySqlCommand comm = new MySqlCommand(sql, connection);
+                comm.Parameters.AddWithValue("@usersId", data.usersId);
+                comm.Parameters.AddWithValue("@canread", data.canread);
+                comm.Parameters.AddWithValue("@caninsert", data.caninsert);
+                comm.Parameters.AddWithValue("@canupdate", data.canupdate);
+                comm.Parameters.AddWithValue("@candelete", data.candelete);
+                comm.Parameters.AddWithValue("@candrop", data.candrop);
+                comm.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return new NewPrivileageModels
+            {
+                usersId = data.usersId,
+                canread = data.canread,
+                caninsert = data.caninsert,
+                canupdate = data.canupdate,
+                candelete = data.candelete,
+                candrop = data.candrop,
+            };
+        }
 
 
+        [HttpPut]
+        [Route("Privileage/{id}")]
+        public PrivileageModels Update(PrivileageModels data)
+        {
+            PrivileageModels user = new PrivileageModels();
+            connecDb conn = new connecDb();
+            try
+            {
+
+                MySqlConnection connection = new MySqlConnection(conn.connectDb());
+                connection.Open();
+                string sql = "UPDATE privileage SET usersId=@usersId,canread=@canread,caninsert=@caninsert,canupdate=@canupdate,candelete=@candelete,candrop=@candrop  WHERE privileageId=@privileageId ;";
+                MySqlCommand comm = new MySqlCommand(sql, connection);
+                comm.Parameters.AddWithValue("@privileageId", data.privileageId);
+                comm.Parameters.AddWithValue("@usersId", data.usersId);
+                comm.Parameters.AddWithValue("@canread", data.canread);
+                comm.Parameters.AddWithValue("@caninsert", data.caninsert);
+                comm.Parameters.AddWithValue("@canupdate", data.canupdate);
+                comm.Parameters.AddWithValue("@candelete", data.candelete);
+                comm.Parameters.AddWithValue("@candrop", data.candrop);
+                //cc.Setdata(sql);
+                comm.ExecuteNonQuery();
+                connection.Close();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{ex.Message}");
+            }
+            return new PrivileageModels
+            {
+                privileageId = data.privileageId,
+                usersId = data.usersId,
+                canread = data.canread,
+                caninsert = data.caninsert,
+                canupdate = data.canupdate,
+                candelete = data.candelete,
+                candrop = data.candrop,
+            };
+        }
+
+        [HttpDelete]
+        [Route("Privileage/{id}")]
+        public void Delete(int id)
+        {
+            try
+            {
+
+                string sql = "DELETE FROM privileage WHERE privileageId ='" + id + "'  ;";
+                conn.Setdata(sql);
+            }
+            catch (Exception ex)
+            { Console.WriteLine(ex.Message); }
 
 
-
-
-
-
-
-
-        //[HttpDelete]
-        //[Route("UsersInformation/{id}")]
-        //public void Delete(int id)
-        //{
-        //    try
-        //    {
-
-        //        string sql = "DELETE FROM users WHERE usersId ='" + id + "'  ;";
-        //        conn.Setdata(sql);
-        //    }
-        //    catch (Exception ex)
-        //    { Console.WriteLine(ex.Message); }
-
-
-        //}
+        }
 
 
 
