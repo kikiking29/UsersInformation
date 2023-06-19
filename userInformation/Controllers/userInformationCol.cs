@@ -82,6 +82,109 @@ namespace userInformation.Controllers
             return user;
         }
 
+
+        [HttpGet]
+        [Route("Usersinformation/usersname")]
+        public List<UsersinforModels> Getbyusersname(string usersname)
+        {
+            List<UsersinforModels> users = new List<UsersinforModels>();
+
+            try
+            {
+
+                DataSet ds = new DataSet();
+                ds = conn.Selectdata("SELECT * FROM users where username like '"+usersname+ "%' ORDER BY username ASC;");
+
+
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    UsersinforModels user = new UsersinforModels()
+                    {
+                        usersId = int.Parse(dr["usersId"].ToString()),
+                        username = dr["username"].ToString(),
+                        password = dr["passwrd"].ToString(),
+                        name = dr["name"].ToString(),
+                        status = dr["status"].ToString()
+
+                    };
+                    users.Add(user);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return users;
+        }
+
+        [HttpGet]
+        [Route("Usersinformation/name")]
+        public List<UsersinforModels> Getbyname(string name)
+        {
+            List<UsersinforModels> users = new List<UsersinforModels>();
+
+            try
+            {
+
+                DataSet ds = new DataSet();
+                ds = conn.Selectdata("SELECT * FROM users where name like '" + name + "%' ORDER BY name ASC;");
+
+
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    UsersinforModels user = new UsersinforModels()
+                    {
+                        usersId = int.Parse(dr["usersId"].ToString()),
+                        username = dr["username"].ToString(),
+                        password = dr["passwrd"].ToString(),
+                        name = dr["name"].ToString(),
+                        status = dr["status"].ToString()
+
+                    };
+                    users.Add(user);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return users;
+        }
+
+        [HttpGet]
+        [Route("Usersinformation/status")]
+        public List<UsersinforModels> Getbystatus(string status)
+        {
+            List<UsersinforModels> users = new List<UsersinforModels>();
+
+            try
+            {
+
+                DataSet ds = new DataSet();
+                ds = conn.Selectdata("SELECT * FROM users where status like '" + status + "%' ORDER BY status ASC;");
+
+
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    UsersinforModels user = new UsersinforModels()
+                    {
+                        usersId = int.Parse(dr["usersId"].ToString()),
+                        username = dr["username"].ToString(),
+                        password = dr["passwrd"].ToString(),
+                        name = dr["name"].ToString(),
+                        status = dr["status"].ToString()
+
+                    };
+                    users.Add(user);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return users;
+        }
+
         [HttpGet]
         [Route("Usersinformation/privileage")]
         public List<UsersinforAndPrivileageModels> GetAllPrivileage()
@@ -121,6 +224,24 @@ namespace userInformation.Controllers
                 Console.WriteLine(ex.Message);
             }
             return uaps;
+        }
+
+        [HttpGet]
+        [Route("Usersinformation/username/passwrd")]
+        public PasswordModels getIduserfromUsernameandPrassword(PasswordModels data)
+        {
+            PasswordModels pass = new PasswordModels();
+
+            try
+            {
+                pass = conn.ChackPassword(data);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return pass;
         }
 
         [HttpPost]
@@ -172,6 +293,7 @@ namespace userInformation.Controllers
                 MySqlCommand comm = new MySqlCommand(sql, connection);
                 comm.Parameters.AddWithValue("@usersId", data.usersId);
                 comm.Parameters.AddWithValue("@username", data.username);
+
                 comm.Parameters.AddWithValue("@password", data.password);
                 //Console.WriteLine(data.image.Length.ToString());
                 comm.Parameters.AddWithValue("@name", data.name);
@@ -207,9 +329,16 @@ namespace userInformation.Controllers
                 pass = conn.ChackPassword(data);
                 MySqlConnection connection = new MySqlConnection(conn.connectDb());
                 connection.Open();
-                string sql = "UPDATE users SET passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@password)))))  WHERE usersId='"+pass.usersId+"' AND passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1('"+pass.old_password+"'))))) ;";
+                string sql = "UPDATE users SET passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@password)))))  WHERE usersId='"+pass.usersId+"' AND passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1('"+data.old_password+"'))))) ;";
                 MySqlCommand comm = new MySqlCommand(sql, connection);
-                
+                if(data.rechack_password != data.password)
+                {
+                    return new PasswordModels
+                    {
+                        password = "Passwords are not the same.",
+                    };
+
+                }
                 comm.Parameters.AddWithValue("@password", data.password);
                 comm.ExecuteNonQuery();
                 connection.Close();
@@ -225,48 +354,57 @@ namespace userInformation.Controllers
             };
         }
 
-        [HttpGet]
-        [Route("Usersinformation/username/passwrd")]
-        public PasswordModels getIduserfromUsernameandPrassword(PasswordModels data)
+        [HttpPut]
+        [Route("UsersInformation/status/Active/{id}")]
+        public void upstatusActive(int id)
         {
-            PasswordModels pass = new PasswordModels();
-
+            myParam param = new myParam();
             try
             {
-                pass = conn.ChackPassword(data);
 
+                string sql = "UPDATE users SET status='Active' WHERE usersId='" + id + "';";
+
+                conn.Setdata(sql);
             }
             catch (Exception ex)
+            { Console.WriteLine(ex.Message); }
+
+        }
+
+        [HttpPut]
+        [Route("UsersInformation/status/Inactive/{id}")]
+        public void upstatusInactive(int id)
+        {
+            myParam param = new myParam();
+            try
             {
-                Console.WriteLine(ex.Message);
+
+                string sql = "UPDATE users SET status='Inactive' WHERE usersId='" + id + "';";
+
+                conn.Setdata(sql);
             }
-            return pass;
+            catch (Exception ex)
+            { Console.WriteLine(ex.Message); }
+
         }
 
 
+        [HttpDelete]
+        [Route("UsersInformation/{id}")]
+        public void Delete(int id)
+        {
+            myParam param = new myParam();
+            try
+            {
+               
+                string sql = "UPDATE users SET status='DELETE' WHERE usersId='"+id+"';";
+                
+                conn.Setdata(sql);
+            }
+            catch (Exception ex)
+            { Console.WriteLine(ex.Message); }
 
-
-
-
-
-
-
-
-        //[HttpDelete]
-        //[Route("UsersInformation/{id}")]
-        //public void Delete(int id)
-        //{
-        //    try
-        //    {
-
-        //        string sql = "DELETE FROM users WHERE usersId ='" + id + "'  ;";
-        //        conn.Setdata(sql);
-        //    }
-        //    catch (Exception ex)
-        //    { Console.WriteLine(ex.Message); }
-
-
-        //}
+        }
 
 
 
