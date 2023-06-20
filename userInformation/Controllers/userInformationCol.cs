@@ -83,26 +83,45 @@ namespace userInformation.Controllers
         }
 
 
-        [HttpGet]
-        [Route("Usersinformation/usersname")]
-        public List<UsersinforModels> Getbyusersname(string usersname)
+        [HttpPost]
+        [Route("Usersinformation/item/")]
+        public List<Selectwithpagging> Getbyusersname(Selectwithpagging data)
         {
-            List<UsersinforModels> users = new List<UsersinforModels>();
+            List<Selectwithpagging> users = new List<Selectwithpagging>();
 
             try
             {
 
                 DataSet ds = new DataSet();
-                ds = conn.Selectdata("SELECT * FROM users where username like '"+usersname+ "%' ORDER BY username ASC;");
+                var sql = "SELECT * FROM users WHERE TRUE";
+
+                if (data != null)
+                {
+                    if(data.username != null)
+                    {
+                        var un = " AND username like '"+ data.username +"%' ";
+                        sql = sql+ un;
+                    }
+                    if (data.name != null)
+                    {
+                        var n = " AND name like '" + data.name + "%' ";
+                        sql = sql + n;
+                    }
+                    if (data.status != null)
+                    {
+                        var s = " AND status like '" + data.status + "%' ";
+                        sql = sql +  s;
+                    }
+                }
+                sql = sql + ";";
+                ds = conn.Selectdata(sql);
 
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    UsersinforModels user = new UsersinforModels()
+                    Selectwithpagging user = new Selectwithpagging()
                     {
-                        usersId = int.Parse(dr["usersId"].ToString()),
                         username = dr["username"].ToString(),
-                        password = dr["passwrd"].ToString(),
                         name = dr["name"].ToString(),
                         status = dr["status"].ToString()
 
@@ -117,73 +136,73 @@ namespace userInformation.Controllers
             return users;
         }
 
-        [HttpGet]
-        [Route("Usersinformation/name")]
-        public List<UsersinforModels> Getbyname(string name)
-        {
-            List<UsersinforModels> users = new List<UsersinforModels>();
+        //[HttpGet]
+        //[Route("Usersinformation/name")]
+        //public List<UsersinforModels> Getbyname(string name)
+        //{
+        //    List<UsersinforModels> users = new List<UsersinforModels>();
 
-            try
-            {
+        //    try
+        //    {
 
-                DataSet ds = new DataSet();
-                ds = conn.Selectdata("SELECT * FROM users where name like '" + name + "%' ORDER BY name ASC;");
-
-
-                foreach (DataRow dr in ds.Tables[0].Rows)
-                {
-                    UsersinforModels user = new UsersinforModels()
-                    {
-                        usersId = int.Parse(dr["usersId"].ToString()),
-                        username = dr["username"].ToString(),
-                        password = dr["passwrd"].ToString(),
-                        name = dr["name"].ToString(),
-                        status = dr["status"].ToString()
-
-                    };
-                    users.Add(user);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            return users;
-        }
-
-        [HttpGet]
-        [Route("Usersinformation/status")]
-        public List<UsersinforModels> Getbystatus(string status)
-        {
-            List<UsersinforModels> users = new List<UsersinforModels>();
-
-            try
-            {
-
-                DataSet ds = new DataSet();
-                ds = conn.Selectdata("SELECT * FROM users where status like '" + status + "%' ORDER BY status ASC;");
+        //        DataSet ds = new DataSet();
+        //        ds = conn.Selectdata("SELECT * FROM users where name like '" + name + "%' ORDER BY name ASC;");
 
 
-                foreach (DataRow dr in ds.Tables[0].Rows)
-                {
-                    UsersinforModels user = new UsersinforModels()
-                    {
-                        usersId = int.Parse(dr["usersId"].ToString()),
-                        username = dr["username"].ToString(),
-                        password = dr["passwrd"].ToString(),
-                        name = dr["name"].ToString(),
-                        status = dr["status"].ToString()
+        //        foreach (DataRow dr in ds.Tables[0].Rows)
+        //        {
+        //            UsersinforModels user = new UsersinforModels()
+        //            {
+        //                usersId = int.Parse(dr["usersId"].ToString()),
+        //                username = dr["username"].ToString(),
+        //                password = dr["passwrd"].ToString(),
+        //                name = dr["name"].ToString(),
+        //                status = dr["status"].ToString()
 
-                    };
-                    users.Add(user);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            return users;
-        }
+        //            };
+        //            users.Add(user);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //    }
+        //    return users;
+        //}
+
+        //[HttpGet]
+        //[Route("Usersinformation/status")]
+        //public List<UsersinforModels> Getbystatus(string status)
+        //{
+        //    List<UsersinforModels> users = new List<UsersinforModels>();
+
+        //    try
+        //    {
+
+        //        DataSet ds = new DataSet();
+        //        ds = conn.Selectdata("SELECT * FROM users where status like '" + status + "%' ORDER BY status ASC;");
+
+
+        //        foreach (DataRow dr in ds.Tables[0].Rows)
+        //        {
+        //            UsersinforModels user = new UsersinforModels()
+        //            {
+        //                usersId = int.Parse(dr["usersId"].ToString()),
+        //                username = dr["username"].ToString(),
+        //                password = dr["passwrd"].ToString(),
+        //                name = dr["name"].ToString(),
+        //                status = dr["status"].ToString()
+
+        //            };
+        //            users.Add(user);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //    }
+        //    return users;
+        //}
 
         [HttpGet]
         [Route("Usersinformation/privileage")]

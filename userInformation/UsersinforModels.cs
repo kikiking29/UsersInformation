@@ -11,6 +11,13 @@ namespace userInformation
         public string? name { get; set; }
         public string status { get; set; }
     }
+
+    public class Selectwithpagging
+    {
+        public string? username { get; set; }
+        public string? name { get; set; }
+        public string status { get; set; }
+    }
     public class NewUsersinforModels
     {
         public string? username { get; set; }
