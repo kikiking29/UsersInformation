@@ -136,74 +136,7 @@ namespace userInformation.Controllers
             return users;
         }
 
-        //[HttpGet]
-        //[Route("Usersinformation/name")]
-        //public List<UsersinforModels> Getbyname(string name)
-        //{
-        //    List<UsersinforModels> users = new List<UsersinforModels>();
-
-        //    try
-        //    {
-
-        //        DataSet ds = new DataSet();
-        //        ds = conn.Selectdata("SELECT * FROM users where name like '" + name + "%' ORDER BY name ASC;");
-
-
-        //        foreach (DataRow dr in ds.Tables[0].Rows)
-        //        {
-        //            UsersinforModels user = new UsersinforModels()
-        //            {
-        //                usersId = int.Parse(dr["usersId"].ToString()),
-        //                username = dr["username"].ToString(),
-        //                password = dr["passwrd"].ToString(),
-        //                name = dr["name"].ToString(),
-        //                status = dr["status"].ToString()
-
-        //            };
-        //            users.Add(user);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //    }
-        //    return users;
-        //}
-
-        //[HttpGet]
-        //[Route("Usersinformation/status")]
-        //public List<UsersinforModels> Getbystatus(string status)
-        //{
-        //    List<UsersinforModels> users = new List<UsersinforModels>();
-
-        //    try
-        //    {
-
-        //        DataSet ds = new DataSet();
-        //        ds = conn.Selectdata("SELECT * FROM users where status like '" + status + "%' ORDER BY status ASC;");
-
-
-        //        foreach (DataRow dr in ds.Tables[0].Rows)
-        //        {
-        //            UsersinforModels user = new UsersinforModels()
-        //            {
-        //                usersId = int.Parse(dr["usersId"].ToString()),
-        //                username = dr["username"].ToString(),
-        //                password = dr["passwrd"].ToString(),
-        //                name = dr["name"].ToString(),
-        //                status = dr["status"].ToString()
-
-        //            };
-        //            users.Add(user);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //    }
-        //    return users;
-        //}
-
+        
         [HttpGet]
         [Route("Usersinformation/privileage")]
         public List<UsersinforAndPrivileageModels> GetAllPrivileage()
