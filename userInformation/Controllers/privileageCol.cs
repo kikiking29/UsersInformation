@@ -22,7 +22,7 @@ namespace userInformation.Controllers
 
         [HttpGet]
         [Route("Privileage")]
-        public List<PrivileageModels> GetAll(){
+        public List<PrivileageModels> Getprivileagedataall(){
 
             List<PrivileageModels> privileages = new List<PrivileageModels>();
             try
@@ -53,7 +53,7 @@ namespace userInformation.Controllers
 
         [HttpGet]
         [Route("Privileage/{id}")]
-        public PrivileageModels GetbyId(int id)
+        public PrivileageModels Getbyprivileageid(int id)
         {
             PrivileageModels privileage = new PrivileageModels();
             myParam p = new myParam();
@@ -89,7 +89,7 @@ namespace userInformation.Controllers
 
         [HttpGet]
         [Route("privileage/Usersinformation")]
-        public List<PrivileageAndUsersinforModels> GetAllPrivileage()
+        public List<PrivileageAndUsersinforModels> Getallprivileageandusers()
         {
 
             List<PrivileageAndUsersinforModels> paus = new List<PrivileageAndUsersinforModels>();
@@ -132,7 +132,7 @@ namespace userInformation.Controllers
 
         [HttpPost]
         [Route("Privileage")]
-        public NewPrivileageModels InsertImage(NewPrivileageModels data)
+        public NewPrivileageModels Insertprivileage(NewPrivileageModels data)
         {
             try
             {
@@ -168,7 +168,7 @@ namespace userInformation.Controllers
 
         [HttpPut]
         [Route("Privileage/{id}")]
-        public PrivileageModels Update(PrivileageModels data)
+        public PrivileageModels Updateprivileage(PrivileageModels data)
         {
             PrivileageModels user = new PrivileageModels();
             connecDb conn = new connecDb();
@@ -209,7 +209,7 @@ namespace userInformation.Controllers
 
         [HttpDelete]
         [Route("Privileage/{id}")]
-        public void Delete(int id)
+        public void Deleteprivileage(int id)
         {
             try
             {

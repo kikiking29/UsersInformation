@@ -32,7 +32,7 @@ namespace userInformation
         public string? username { get; set; }   
         public string old_password { get; set; }
         public string password { get; set; }
-        public string rechack_password { get; set; }
+        public string recheck_password { get; set; }
     }
     public class PrivileageModels
     {

@@ -22,7 +22,7 @@ namespace userInformation.Controllers
 
         [HttpGet]
         [Route("Usersinformation")]
-        public List<UsersinforModels> GetAll(){
+        public List<UsersinforModels> Getusersdataall(){
 
             List<UsersinforModels> users = new List<UsersinforModels>();
             try
@@ -52,7 +52,7 @@ namespace userInformation.Controllers
 
         [HttpGet]
         [Route("Usersinformation/{id}")]
-        public UsersinforModels GetbyId(int id)
+        public UsersinforModels Getbyusersid(int id)
         {
             UsersinforModels user = new UsersinforModels();
             
@@ -85,7 +85,7 @@ namespace userInformation.Controllers
 
         [HttpPost]
         [Route("Usersinformation/item/")]
-        public List<Selectwithpagging> Getbyusersname(Selectwithpagging data)
+        public List<Selectwithpagging> Getbyparamforselectwithpagging(Selectwithpagging data)
         {
             List<Selectwithpagging> users = new List<Selectwithpagging>();
 
@@ -139,10 +139,9 @@ namespace userInformation.Controllers
         
         [HttpGet]
         [Route("Usersinformation/privileage")]
-        public List<UsersinforAndPrivileageModels> GetAllPrivileage()
+        public List<UsersinforAndPrivileageModels> Getalluserandprivileage()
         {
             List<UsersinforAndPrivileageModels> uaps = new List<UsersinforAndPrivileageModels>();
-            
 
             try
             {
@@ -178,32 +177,14 @@ namespace userInformation.Controllers
             return uaps;
         }
 
-        [HttpGet]
-        [Route("Usersinformation/username/passwrd")]
-        public PasswordModels getIduserfromUsernameandPrassword(PasswordModels data)
-        {
-            PasswordModels pass = new PasswordModels();
-
-            try
-            {
-                pass = conn.ChackPassword(data);
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            return pass;
-        }
-
+ 
         [HttpPost]
         [Route("UsersInformation")]
-        public NewUsersinforModels InsertImage(NewUsersinforModels data)
+        public NewUsersinforModels Registerusers(NewUsersinforModels data)
         {
             try
             {
-                List<myParam> param = new List<myParam>();
-                myParam p = new myParam();
+               
                 MySqlConnection connection = new MySqlConnection(conn.connectDb());
                 connection.Open();
                 string sql = "INSERT into users set username=@username,passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@password))))),name=@name,status=@status;";
@@ -232,33 +213,27 @@ namespace userInformation.Controllers
 
         [HttpPut]
         [Route("UsersInformation/{id}")]
-        public UsersinforModels Update(UsersinforModels data)
+        public UsersinforModels Updateusers(UsersinforModels data)
         {
             UsersinforModels user = new UsersinforModels();
             connecDb conn = new connecDb();
             try
             {
-
                 MySqlConnection connection = new MySqlConnection(conn.connectDb());
                 connection.Open();
                 string sql = "UPDATE users SET username=@username,passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@password))))),name=@name,status=@status  WHERE usersId=@usersId ;";
                 MySqlCommand comm = new MySqlCommand(sql, connection);
                 comm.Parameters.AddWithValue("@usersId", data.usersId);
                 comm.Parameters.AddWithValue("@username", data.username);
-
                 comm.Parameters.AddWithValue("@password", data.password);
-                //Console.WriteLine(data.image.Length.ToString());
                 comm.Parameters.AddWithValue("@name", data.name);
                 comm.Parameters.AddWithValue("@status", data.status);
-                //cc.Setdata(sql);
                 comm.ExecuteNonQuery();
                 connection.Close();
 
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"{ex.Message}");
-            }
+            catch (Exception ex){Console.WriteLine(ex.Message);}
+
             return new UsersinforModels
             {
                 usersId = data.usersId,
@@ -272,7 +247,7 @@ namespace userInformation.Controllers
 
         [HttpPut]
         [Route("UsersInformation/username/password")]
-        public PasswordModels UpdatetoPassword(PasswordModels data)
+        public PasswordModels Updatepassword(PasswordModels data)
         {
             PasswordModels pass = new PasswordModels();
             connecDb conn = new connecDb();
@@ -283,12 +258,9 @@ namespace userInformation.Controllers
                 connection.Open();
                 string sql = "UPDATE users SET passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@password)))))  WHERE usersId='"+pass.usersId+"' AND passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1('"+data.old_password+"'))))) ;";
                 MySqlCommand comm = new MySqlCommand(sql, connection);
-                if(data.rechack_password != data.password)
+                if(data.recheck_password != data.password)
                 {
-                    return new PasswordModels
-                    {
-                        password = "Passwords are not the same.",
-                    };
+                    return new PasswordModels{ password = "Passwords are not the same." };
 
                 }
                 comm.Parameters.AddWithValue("@password", data.password);
@@ -296,14 +268,8 @@ namespace userInformation.Controllers
                 connection.Close();
 
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"{ex.Message}");
-            }
-            return new PasswordModels
-            {
-                password = data.password,
-            };
+            catch (Exception ex){Console.WriteLine(ex.Message);}
+            return new PasswordModels { usersId=pass.usersId, password = data.password };
         }
 
         [HttpPut]
@@ -343,14 +309,11 @@ namespace userInformation.Controllers
 
         [HttpDelete]
         [Route("UsersInformation/{id}")]
-        public void Delete(int id)
+        public void Deleteusers(int id)
         {
-            myParam param = new myParam();
             try
             {
-               
                 string sql = "UPDATE users SET status='DELETE' WHERE usersId='"+id+"';";
-                
                 conn.Setdata(sql);
             }
             catch (Exception ex)

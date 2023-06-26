@@ -14,18 +14,10 @@ namespace userInformation.ConnecDb
         public String Setdata(string Sql)
         {
             MySqlConnection connection = new MySqlConnection(connectionstring);
-            //DataSet ds = new DataSet();
             connection.Open();
-
-            //insert updat delete
-            MySqlCommand comm = new MySqlCommand(Sql, connection);
-
+            MySqlCommand comm = new MySqlCommand(Sql,connection);
             String result = Convert.ToString(comm.ExecuteNonQuery());
-
-
             connection.Close();
-
-
             return result;
         }
 
@@ -33,15 +25,9 @@ namespace userInformation.ConnecDb
         {
             MySqlConnection connection = new MySqlConnection(connectionstring);
             DataSet ds = new DataSet();
-
-
             connection.Open();
-
-            MySqlDataAdapter dap = new MySqlDataAdapter(Sql, connection);
-
-            //select
+            MySqlDataAdapter dap = new MySqlDataAdapter(Sql,connection);
             dap.Fill(ds);
-
             connection.Close();
             return ds;
         }
@@ -54,8 +40,6 @@ namespace userInformation.ConnecDb
             connection.Open();
             string Sql = "SELECT usersId FROM users where username='"+data.username+"'AND passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1('"+data.old_password+"')))));";
             MySqlDataAdapter dap = new MySqlDataAdapter(Sql, connection);
-
-            //select
             dap.Fill(ds);
             foreach (DataRow dr in ds.Tables[0].Rows)
             {
