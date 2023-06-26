@@ -1,7 +1,7 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
-
-namespace userInformation
+namespace userInformation.Models
 {
     public class UsersinforModels
     {
@@ -29,7 +29,7 @@ namespace userInformation
     public class PasswordModels
     {
         public int usersId { get; set; }
-        public string? username { get; set; }   
+        public string username { get; set; }
         public string old_password { get; set; }
         public string password { get; set; }
         public string rechack_password { get; set; }
@@ -74,7 +74,7 @@ namespace userInformation
 
     public class PrivileageAndUsersinforModels
     {
-       
+
         public int privileageId { get; set; }
         public int p_usersId { get; set; }
         public string canread { get; set; }
@@ -88,5 +88,7 @@ namespace userInformation
         public string? name { get; set; }
         public string status { get; set; }
     }
+    
+
 
 }

@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System.Data;
+using userInformation.Models;
 
 namespace userInformation.ConnecDb
 {
@@ -52,7 +53,7 @@ namespace userInformation.ConnecDb
             MySqlConnection connection = new MySqlConnection(connectionstring);
             DataSet ds = new DataSet();
             connection.Open();
-            string Sql = "SELECT usersId FROM users where username='"+data.username+"'AND passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1('"+data.old_password+"')))));";
+            string Sql = "SELECT usersId,username FROM users where username='" + data.username+"'AND passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1('"+data.old_password+"')))));";
             MySqlDataAdapter dap = new MySqlDataAdapter(Sql, connection);
 
             //select
@@ -62,10 +63,14 @@ namespace userInformation.ConnecDb
                 passwrd = new PasswordModels()
                 {
                     usersId = int.Parse(dr["usersId"].ToString()),
+                    username = dr["username"].ToString(),
+                    old_password = data.old_password
                 };
             }
             connection.Close();
             return passwrd;
         }
+
+        
     }
 }

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using userInformation;
 using userInformation.ConnecDb;
+using Microsoft.AspNetCore.Authorization;
 
 using System;
 using System.Data;
@@ -8,9 +8,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using static System.Net.Mime.MediaTypeNames;
 using System.Xml.Linq;
 using MySql.Data.MySqlClient;
+using userInformation.Models;
 
 namespace userInformation.Controllers
-{ 
+{
     public class userInformationCol : ControllerBase
     {
         connecDb conn = new connecDb();
@@ -136,73 +137,6 @@ namespace userInformation.Controllers
             return users;
         }
 
-        //[HttpGet]
-        //[Route("Usersinformation/name")]
-        //public List<UsersinforModels> Getbyname(string name)
-        //{
-        //    List<UsersinforModels> users = new List<UsersinforModels>();
-
-        //    try
-        //    {
-
-        //        DataSet ds = new DataSet();
-        //        ds = conn.Selectdata("SELECT * FROM users where name like '" + name + "%' ORDER BY name ASC;");
-
-
-        //        foreach (DataRow dr in ds.Tables[0].Rows)
-        //        {
-        //            UsersinforModels user = new UsersinforModels()
-        //            {
-        //                usersId = int.Parse(dr["usersId"].ToString()),
-        //                username = dr["username"].ToString(),
-        //                password = dr["passwrd"].ToString(),
-        //                name = dr["name"].ToString(),
-        //                status = dr["status"].ToString()
-
-        //            };
-        //            users.Add(user);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //    }
-        //    return users;
-        //}
-
-        //[HttpGet]
-        //[Route("Usersinformation/status")]
-        //public List<UsersinforModels> Getbystatus(string status)
-        //{
-        //    List<UsersinforModels> users = new List<UsersinforModels>();
-
-        //    try
-        //    {
-
-        //        DataSet ds = new DataSet();
-        //        ds = conn.Selectdata("SELECT * FROM users where status like '" + status + "%' ORDER BY status ASC;");
-
-
-        //        foreach (DataRow dr in ds.Tables[0].Rows)
-        //        {
-        //            UsersinforModels user = new UsersinforModels()
-        //            {
-        //                usersId = int.Parse(dr["usersId"].ToString()),
-        //                username = dr["username"].ToString(),
-        //                password = dr["passwrd"].ToString(),
-        //                name = dr["name"].ToString(),
-        //                status = dr["status"].ToString()
-
-        //            };
-        //            users.Add(user);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //    }
-        //    return users;
-        //}
 
         [HttpGet]
         [Route("Usersinformation/privileage")]
@@ -424,6 +358,9 @@ namespace userInformation.Controllers
             { Console.WriteLine(ex.Message); }
 
         }
+
+
+       
 
 
 
