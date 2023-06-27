@@ -11,6 +11,7 @@
         public string AuthToken { get; set; }
         
         public DateTime AccessTokenExpireDate { get; set; }
+        public GenerateTokenResponse Token { get; set; }
     }
     public class GenerateTokenRequest
     {

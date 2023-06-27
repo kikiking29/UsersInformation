@@ -1,5 +1,4 @@
-﻿
-using userInformation.Interfaces;
+﻿using userInformation.Interfaces;
 using userInformation.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
