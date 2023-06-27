@@ -9,6 +9,7 @@
   <ItemGroup>
     <Compile Remove="Controllers\UsersController.cs" />
     <Compile Remove="Controllers\WeatherForecastController.cs" />
+    <Compile Remove="EncodestringtoBase64.cs" />
     <Compile Remove="PrivileageModel.cs" />
     <Compile Remove="WeatherForecast.cs" />
   </ItemGroup>
@@ -18,7 +19,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.19" />
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="7.0.8" />
     <PackageReference Include="MySql.Data" Version="8.0.33" />
+    <PackageReference Include="Record" Version="6.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.31.0" />
   </ItemGroup>
 
 </Project>

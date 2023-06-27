@@ -9,7 +9,7 @@ namespace userInformation.Services
 {
     public class TokenService : ITokenService
     {
-        readonly IConfiguration configuration;
+        private readonly IConfiguration configuration;
         public TokenService(IConfiguration configuration)
         {
             this.configuration = configuration;
