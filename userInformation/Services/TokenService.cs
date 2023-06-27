@@ -23,8 +23,7 @@ namespace userInformation.Services
             JwtSecurityToken jwt = new JwtSecurityToken(
                     issuer: configuration["AppSettings:ValidIssuer"],
                     audience: configuration["AppSettings:ValidAudience"],
-                    claims: new List<Claim> {
-                    new Claim("username", request.Username)},
+                    claims: new List<Claim> { new Claim("username", request.Username)},
                     notBefore: dateTimeNow,
                     expires: dateTimeNow.Add(TimeSpan.FromMinutes(500)),
                     signingCredentials: new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256)
