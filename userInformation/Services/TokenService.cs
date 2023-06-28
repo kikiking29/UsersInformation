@@ -9,31 +9,33 @@ namespace userInformation.Services
 {
     public class TokenService : ITokenService
     {
-        private readonly IConfiguration configuration;
+        readonly IConfiguration configuration;
         public TokenService(IConfiguration configuration)
         {
             this.configuration = configuration;
         }
         public Task<GenerateTokenResponse> GenerateToken(GenerateTokenRequest request)
         {
-            SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["AppSettings:Secret"]));
+            GenerateTokenResponse tokenResponse = new GenerateTokenResponse();
+            SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Jwt:Key"]));
 
             var dateTimeNow = DateTime.UtcNow;
 
             JwtSecurityToken jwt = new JwtSecurityToken(
-                    issuer: configuration["AppSettings:ValidIssuer"],
-                    audience: configuration["AppSettings:ValidAudience"],
+                    issuer: configuration["Jwt:Issuer"],
+                    audience: configuration["Jwt:Audience"],
                     claims: new List<Claim> { new Claim("username", request.Username)},
                     notBefore: dateTimeNow,
                     expires: dateTimeNow.Add(TimeSpan.FromMinutes(500)),
                     signingCredentials: new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256)
                 );
-
-            return Task.FromResult(new GenerateTokenResponse
+            tokenResponse = new GenerateTokenResponse()
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(jwt),
                 TokenExpireDate = dateTimeNow.Add(TimeSpan.FromMinutes(500))
-            });
+            };
+
+            return Task.FromResult(tokenResponse);
         }
     }
 }

@@ -13,9 +13,10 @@ namespace userInformation.Controllers
     public class AuthController
     {
         readonly IAuthService authService;
+      
         public AuthController(IAuthService authService)
         {
-            this.authService = authService;
+            this.authService = authService;    
         }
         
   
@@ -24,9 +25,11 @@ namespace userInformation.Controllers
         public async Task<ActionResult<UserLoginResponse>> LoginUserAsync([FromBody] UserLoginRequest request)
         {
             var result = await authService.LoginUserAsync(request);
-
             return result;
+
+            
         }
+        
 
     }
 }
