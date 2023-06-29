@@ -5,6 +5,7 @@ using userInformation.Models;
 using userInformation.Services;
 using Microsoft.AspNetCore.Authorization;
 using System.Configuration;
+using System.Security.Claims;
 
 namespace userInformation.Controllers
 {

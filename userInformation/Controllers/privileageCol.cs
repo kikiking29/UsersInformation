@@ -8,9 +8,11 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Xml.Linq;
 using MySql.Data.MySqlClient;
 using userInformation.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace userInformation.Controllers
 {
+    [Authorize]
     public class privileageCol : ControllerBase
     {
         connecDb conn = new connecDb();

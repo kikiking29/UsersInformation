@@ -22,12 +22,24 @@ namespace userInformation
             // Add services to the container.
 
             builder.Services.AddControllers();
+            builder.Services.AddConnections();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddAuthentication().AddCookie("defult");
 
             builder.Services.AddTransient<IAuthService, AuthService>();
             builder.Services.AddTransient<ITokenService, TokenService>();
+            builder.Services.AddAuthentication("MyAuthScheme")
+            .AddCookie("MyAuthScheme", options => {
+                options.LoginPath = "/Login";
+                options.LogoutPath = "/Logout";
+                options.AccessDeniedPath = "/AccessDenied";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                options.Cookie.MaxAge = options.ExpireTimeSpan;
+            });
+
+            builder.Services.AddHttpContextAccessor();
 
             //var securityScheme = new OpenApiSecurityScheme()
             //{
@@ -42,7 +54,6 @@ namespace userInformation
             //        Type = ReferenceType.SecurityScheme,
             //        Id = JwtBearerDefaults.AuthenticationScheme,
             //    }
-
             //};
 
 
@@ -102,7 +113,12 @@ namespace userInformation
 
 
             var app = builder.Build();
+            app.UseStaticFiles();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
+            //app.MapRazorPages();
+            app.MapControllers();
             //UserLoginRequest user = new UserLoginRequest();
 
             //app.MapPost("/security/getToken", [AllowAnonymous] (UserLoginRequest user) =>

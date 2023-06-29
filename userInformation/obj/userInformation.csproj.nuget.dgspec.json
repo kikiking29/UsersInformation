@@ -53,6 +53,10 @@
               "target": "Package",
               "version": "[7.0.8, )"
             },
+            "Microsoft.AspNetCore.Http.Abstractions": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
             "MySql.Data": {
               "target": "Package",
               "version": "[8.0.33, )"

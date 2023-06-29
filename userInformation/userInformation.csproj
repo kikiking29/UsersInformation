@@ -15,13 +15,102 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="bin\Debug\net6.0\appsettings.Development.json" />
+    <Content Include="bin\Debug\net6.0\appsettings.json" />
+    <Content Include="bin\Debug\net6.0\userInformation.deps.json" />
+    <Content Include="bin\Debug\net6.0\userInformation.runtimeconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bin\Debug\net6.0\AngleSharp.dll" />
+    <None Include="bin\Debug\net6.0\BouncyCastle.Crypto.dll" />
+    <None Include="bin\Debug\net6.0\dotNetRdf.Client.dll" />
+    <None Include="bin\Debug\net6.0\dotNetRdf.Data.DataTables.dll" />
+    <None Include="bin\Debug\net6.0\dotNetRdf.dll" />
+    <None Include="bin\Debug\net6.0\dotNetRdf.Dynamic.dll" />
+    <None Include="bin\Debug\net6.0\dotNetRdf.Inferencing.dll" />
+    <None Include="bin\Debug\net6.0\dotNetRdf.Ontology.dll" />
+    <None Include="bin\Debug\net6.0\dotNetRdf.Query.FullText.dll" />
+    <None Include="bin\Debug\net6.0\dotNetRdf.Query.Spin.dll" />
+    <None Include="bin\Debug\net6.0\dotNetRdf.Shacl.dll" />
+    <None Include="bin\Debug\net6.0\dotNetRdf.Skos.dll" />
+    <None Include="bin\Debug\net6.0\dotNetRdf.Writing.HtmlSchema.dll" />
+    <None Include="bin\Debug\net6.0\Google.Protobuf.dll" />
+    <None Include="bin\Debug\net6.0\HtmlAgilityPack.dll" />
+    <None Include="bin\Debug\net6.0\ICSharpCode.SharpZipLib.dll" />
+    <None Include="bin\Debug\net6.0\J2N.dll" />
+    <None Include="bin\Debug\net6.0\JwtSharp.dll" />
+    <None Include="bin\Debug\net6.0\K4os.Compression.LZ4.dll" />
+    <None Include="bin\Debug\net6.0\K4os.Compression.LZ4.Streams.dll" />
+    <None Include="bin\Debug\net6.0\K4os.Hash.xxHash.dll" />
+    <None Include="bin\Debug\net6.0\Lucene.Net.Analysis.Common.dll" />
+    <None Include="bin\Debug\net6.0\Lucene.Net.dll" />
+    <None Include="bin\Debug\net6.0\Lucene.Net.Queries.dll" />
+    <None Include="bin\Debug\net6.0\Lucene.Net.QueryParser.dll" />
+    <None Include="bin\Debug\net6.0\Lucene.Net.Sandbox.dll" />
+    <None Include="bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll" />
+    <None Include="bin\Debug\net6.0\Microsoft.AspNetCore.Authorization.dll" />
+    <None Include="bin\Debug\net6.0\Microsoft.AspNetCore.Metadata.dll" />
+    <None Include="bin\Debug\net6.0\Microsoft.Extensions.Configuration.Abstractions.dll" />
+    <None Include="bin\Debug\net6.0\Microsoft.Extensions.Configuration.dll" />
+    <None Include="bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll" />
+    <None Include="bin\Debug\net6.0\Microsoft.Extensions.Logging.Abstractions.dll" />
+    <None Include="bin\Debug\net6.0\Microsoft.Extensions.Options.dll" />
+    <None Include="bin\Debug\net6.0\Microsoft.Extensions.Primitives.dll" />
+    <None Include="bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll" />
+    <None Include="bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll" />
+    <None Include="bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll" />
+    <None Include="bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll" />
+    <None Include="bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll" />
+    <None Include="bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll" />
+    <None Include="bin\Debug\net6.0\Microsoft.OpenApi.dll" />
+    <None Include="bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll" />
+    <None Include="bin\Debug\net6.0\MySql.Data.dll" />
+    <None Include="bin\Debug\net6.0\Newtonsoft.Json.dll" />
+    <None Include="bin\Debug\net6.0\Records.dll" />
+    <None Include="bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll" />
+    <None Include="bin\Debug\net6.0\runtimes\win-x64\native\comerr64.dll" />
+    <None Include="bin\Debug\net6.0\runtimes\win-x64\native\gssapi64.dll" />
+    <None Include="bin\Debug\net6.0\runtimes\win-x64\native\k5sprt64.dll" />
+    <None Include="bin\Debug\net6.0\runtimes\win-x64\native\krb5_64.dll" />
+    <None Include="bin\Debug\net6.0\runtimes\win-x64\native\krbcc64.dll" />
+    <None Include="bin\Debug\net6.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll" />
+    <None Include="bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll" />
+    <None Include="bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll" />
+    <None Include="bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll" />
+    <None Include="bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll" />
+    <None Include="bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll" />
+    <None Include="bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll" />
+    <None Include="bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll" />
+    <None Include="bin\Debug\net6.0\System.Drawing.Common.dll" />
+    <None Include="bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll" />
+    <None Include="bin\Debug\net6.0\System.IO.Pipelines.dll" />
+    <None Include="bin\Debug\net6.0\System.Security.Cryptography.ProtectedData.dll" />
+    <None Include="bin\Debug\net6.0\System.Security.Permissions.dll" />
+    <None Include="bin\Debug\net6.0\System.Text.Encodings.Web.dll" />
+    <None Include="bin\Debug\net6.0\System.Text.Json.dll" />
+    <None Include="bin\Debug\net6.0\System.Windows.Extensions.dll" />
+    <None Include="bin\Debug\net6.0\userInformation.dll" />
+    <None Include="bin\Debug\net6.0\userInformation.exe" />
+    <None Include="bin\Debug\net6.0\userInformation.pdb" />
+    <None Include="bin\Debug\net6.0\VDS.Common.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="JwtSharp" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.19" />
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="7.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="MySql.Data" Version="8.0.33" />
     <PackageReference Include="Record" Version="6.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.31.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="bin\Debug\net6.0\runtimes\unix\lib\netcoreapp3.0\" />
+    <Folder Include="bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\" />
+    <Folder Include="bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\" />
   </ItemGroup>
 
 </Project>

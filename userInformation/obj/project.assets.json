@@ -6649,6 +6649,7 @@
       "JwtSharp >= 1.1.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 6.0.19",
       "Microsoft.AspNetCore.Authorization >= 7.0.8",
+      "Microsoft.AspNetCore.Http.Abstractions >= 2.2.0",
       "MySql.Data >= 8.0.33",
       "Record >= 6.0.0",
       "Swashbuckle.AspNetCore >= 6.2.3",
@@ -6706,6 +6707,10 @@
           "Microsoft.AspNetCore.Authorization": {
             "target": "Package",
             "version": "[7.0.8, )"
+          },
+          "Microsoft.AspNetCore.Http.Abstractions": {
+            "target": "Package",
+            "version": "[2.2.0, )"
           },
           "MySql.Data": {
             "target": "Package",

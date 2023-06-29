@@ -12,6 +12,7 @@ using userInformation.Models;
 
 namespace userInformation.Controllers
 {
+    [Authorize]
     public class userInformationCol : ControllerBase
     {
         connecDb conn = new connecDb();

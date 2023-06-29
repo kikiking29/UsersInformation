@@ -2,16 +2,24 @@
 using userInformation.Models;
 using userInformation.ConnecDb;
 using userInformation.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
 
 namespace userInformation.Services
 {
     public class AuthService : IAuthService
     {
         readonly ITokenService tokenService;
+        private readonly IHttpContextAccessor httpContextAccessor;
         connecDb conn = new connecDb();
-        public AuthService( ITokenService tokenService)
+        public AuthService( ITokenService tokenService, IHttpContextAccessor httpContextAccessor)
         {
             this.tokenService = tokenService;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public Task<UserLoginResponse> LoginUserAsync(UserLoginRequest request)
@@ -25,6 +33,9 @@ namespace userInformation.Services
             pass.old_password = request.Password;
             passwrd = conn.ChackPassword(pass);
 
+            
+
+           
 
             if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
             {
@@ -37,16 +48,14 @@ namespace userInformation.Services
                 GenerateTokenRequest genTokenRequest = new GenerateTokenRequest();
                 genTokenRequest.Username = request.Username;
                 Task<GenerateTokenResponse> genTokenresponse = tokenService.GenerateToken(genTokenRequest);
+
                 response.AccessTokenExpireDate = genTokenresponse.Result.TokenExpireDate;
                 response.AuthenticateResult = true;
                 response.AuthToken = genTokenresponse.Result.Token;
-                //Task.FromResult(genTokenresponse);
-                //Task.FromResult(tokenService.GenerateToken(genTokenRequest));
+               
             }
             return Task.FromResult(response);
         }
-
-
-
+        
     }
 }
