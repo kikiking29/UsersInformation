@@ -33,7 +33,7 @@ namespace userInformation.Services
                     new Claim(ClaimTypes.Name, request.Username),
                     new Claim(ClaimTypes.Email, request.Username)},
                     notBefore: dateTimeNow,
-                    expires: dateTimeNow.Add(TimeSpan.FromMinutes(10)),
+                    expires: dateTimeNow.Add(TimeSpan.FromMinutes(5)),
                     signingCredentials: new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256)
                 ) ;
 
@@ -43,7 +43,7 @@ namespace userInformation.Services
             tokenResponse = new GenerateTokenResponse()
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(jwt),
-                TokenExpireDate = dateTimeNow.Add(TimeSpan.FromMinutes(10))
+                TokenExpireDate = dateTimeNow.Add(TimeSpan.FromMinutes(5))
             };
 
             return Task.FromResult(tokenResponse);
