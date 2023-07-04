@@ -97,6 +97,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CUSTIS.NetCore.AuthZ.Permissions" Version="46.3.0" />
     <PackageReference Include="JwtSharp" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.19" />
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="7.0.8" />

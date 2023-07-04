@@ -12,11 +12,14 @@ using System.Security.Claims;
 using Microsoft.Extensions.DependencyInjection;
 using VDS.RDF.Nodes;
 using VDS.RDF.Query.Algebra;
+using Microsoft.AspNetCore.Authentication;
 
 namespace userInformation
 {
     public class Program
     {
+        
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -39,61 +42,35 @@ namespace userInformation
 
             builder.Services.AddAuthentication("MyAuthScheme")
             .AddCookie("MyAuthScheme", options => {
-                
-                options.AccessDeniedPath = "/AccessDenied";
+
+                options.Cookie.SameSite = SameSiteMode.Lax;
                 options.Cookie.Name = ".AspNet.SharedCookie";
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(1);
                 options.Cookie.MaxAge = options.ExpireTimeSpan;
                 options.SlidingExpiration = true;
                 options.EventsType = typeof(CustomCookieAuthenticationEvents);
+                
+            }).AddJwtBearer(options => { options.Events.OnMessageReceived = context => {
+                if (context.Request.Cookies.ContainsKey("X-Access-Token"))
+                {
+                    context.Token = context.Request.Cookies["X-Access-Token"];
+                }
+            return Task.CompletedTask;
+                };
             });
+
+
             builder.Services.AddTransient<CustomCookieAuthenticationEvents>();
             builder.Services.AddHttpContextAccessor();
 
-            var securityScheme = new OpenApiSecurityScheme()
+            builder.Services.AddAuthorization(builder =>
             {
-                Name = "Admin",
-                Type = SecuritySchemeType.Http,
-                Scheme = "bearer",
-                BearerFormat = "JWT",
-                In = ParameterLocation.Header,
-                Description = "JSON Web Token based security",
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = JwtBearerDefaults.AuthenticationScheme,
-                }
-            };
-
-            //builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(o =>
-            {
-                //o.SwaggerDoc("v1", info);
-                o.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
-                o.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {securityScheme, new string[] { }}
-                });
+                builder.AddPolicy("mypolicy",pb => pb
+                .RequireAuthenticatedUser()
+                .RequireClaim("doesntexist","nonse")
+                );
             });
-
-            //builder.Services.AddAuthentication(o =>
-            //{
-            //    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            //}).AddJwtBearer(o =>
-            //{
-            //    o.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            //        ValidAudience = builder.Configuration["Jwt:Audience"],
-            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-            //        ValidateIssuer = true,
-            //        ValidateAudience = true,
-            //        ValidateLifetime = false,
-            //        ValidateIssuerSigningKey = true
-            //    };
-            //});
+           
 
             builder.Services.AddAuthorization();
             builder.Services.AddEndpointsApiExplorer();
@@ -114,9 +91,17 @@ namespace userInformation
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            app.UseAuthentication();
-            app.UseAuthorization();
 
+
+            app.MapGet("/Logout", async (HttpContext context) =>
+            {
+                await context.SignOutAsync("MyAuthScheme",
+                    new AuthenticationProperties()
+                    {
+                        IsPersistent = true
+                    });
+                return "OK";
+            });
 
             app.UseHttpsRedirection();
             app.UseAuthorization();
@@ -132,3 +117,49 @@ namespace userInformation
 
     }
 }
+
+
+//var securityScheme = new OpenApiSecurityScheme()
+//{
+//    Name = "Admin",
+//    Type = SecuritySchemeType.Http,
+//    Scheme = "bearer",
+//    BearerFormat = "JWT",
+//    In = ParameterLocation.Header,
+//    Description = "JSON Web Token based security",
+//    Reference = new OpenApiReference
+//    {
+//        Type = ReferenceType.SecurityScheme,
+//        Id = JwtBearerDefaults.AuthenticationScheme,
+//    }
+//};
+
+////builder.Services.AddEndpointsApiExplorer();
+//builder.Services.AddSwaggerGen(o =>
+//{
+//    //o.SwaggerDoc("v1", info);
+//    o.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
+//    o.AddSecurityRequirement(new OpenApiSecurityRequirement
+//    {
+//        {securityScheme, new string[] { }}
+//    });
+//});
+
+//builder.Services.AddAuthentication(o =>
+//{
+//    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//    o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+//}).AddJwtBearer(o =>
+//{
+//    o.TokenValidationParameters = new TokenValidationParameters
+//    {
+//        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+//        ValidAudience = builder.Configuration["Jwt:Audience"],
+//        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+//        ValidateIssuer = true,
+//        ValidateAudience = true,
+//        ValidateLifetime = false,
+//        ValidateIssuerSigningKey = true
+//    };
+//});

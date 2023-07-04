@@ -30,10 +30,11 @@ namespace userInformation.Services
                     audience: configuration["Jwt:Audience"],
                     claims: new List<Claim> { 
                     new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()),
+                    new Claim("session", Guid.NewGuid().ToString()),
                     new Claim(ClaimTypes.Name, request.Username),
                     new Claim(ClaimTypes.Email, request.Username)},
                     notBefore: dateTimeNow,
-                    expires: dateTimeNow.Add(TimeSpan.FromMinutes(5)),
+                    expires: dateTimeNow.Add(TimeSpan.FromMinutes(1)),
                     signingCredentials: new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256)
                 ) ;
 
@@ -43,7 +44,7 @@ namespace userInformation.Services
             tokenResponse = new GenerateTokenResponse()
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(jwt),
-                TokenExpireDate = dateTimeNow.Add(TimeSpan.FromMinutes(5))
+                TokenExpireDate = dateTimeNow.Add(TimeSpan.FromMinutes(1))
             };
 
             return Task.FromResult(tokenResponse);

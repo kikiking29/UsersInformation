@@ -6,6 +6,9 @@ using userInformation.Services;
 using Microsoft.AspNetCore.Authorization;
 using System.Configuration;
 using System.Security.Claims;
+using System.Net;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace userInformation.Controllers
 {
@@ -30,7 +33,6 @@ namespace userInformation.Controllers
 
             
         }
-        
 
     }
 }
