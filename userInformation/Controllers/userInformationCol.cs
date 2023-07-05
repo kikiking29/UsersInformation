@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using userInformation;
 using userInformation.ConnecDb;
 
 using System;
@@ -8,9 +7,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using static System.Net.Mime.MediaTypeNames;
 using System.Xml.Linq;
 using MySql.Data.MySqlClient;
+using userInformation.Model;
 
 namespace userInformation.Controllers
-{ 
+{
     public class userInformationCol : ControllerBase
     {
         connecDb conn = new connecDb();
