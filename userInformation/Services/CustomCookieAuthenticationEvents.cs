@@ -1,19 +1,21 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Http;
-using CUSTIS.NetCore.Auth.Contracts.UserManagement;
 
 namespace userInformation.Services
 {
     public class CustomCookieAuthenticationEvents : CookieAuthenticationEvents
     {
+        
+        
+
         private const string TicketIssuedTicks = nameof(TicketIssuedTicks);
         
         public override async Task SigningIn(CookieSigningInContext context)
         {
             context.Properties.SetString(TicketIssuedTicks, DateTimeOffset.UtcNow.Ticks.ToString());
             await base.SigningIn(context);
+            
             //if (IsPersistent != true)
             //{
 
@@ -47,20 +49,31 @@ namespace userInformation.Services
 
         }
 
-        public static async Task RefreshLoginAsync(HttpContext context)
-        {
-            if (context.User == null)
-                return;
+        //public static async Task RefreshLoginAsync(HttpContext context)
+        //{
+        //    try
+        //    {
 
-            var userManager = context.RequestServices.GetRequiredService<UserManager<IdentityUser>>();
-            var signInManager = context.RequestServices.GetRequiredService<SignInManager<IdentityUser>>();
+        //        if (context.User == null)
+        //            return;
 
-            IdentityUser user = await userManager.GetUserAsync(context.User);
 
-            if (signInManager.IsSignedIn(context.User))
-            {
-                await signInManager.RefreshSignInAsync(user);
-            }
-        }
+        //        var signInManager = context.RequestServices.GetRequiredService<SignInManager<IdentityUser>>();
+        //        var userManager = context.RequestServices.GetRequiredService<UserManager<IdentityUser>>();
+        //        IdentityUser user = await userManager.GetUserAsync(context.User);
+
+
+        //        if (signInManager.IsSignedIn(context.User))
+        //        {
+        //            await signInManager.RefreshSignInAsync(user);
+        //        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex);
+        //    }
+
+        //}
     }
 }

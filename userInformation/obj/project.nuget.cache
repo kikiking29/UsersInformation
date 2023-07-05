@@ -1,11 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "Vb+T4ID0b+NLl7RGvi9B7dRSZnNE5HqBld5aKjgsEy1blVJapvGHkmR3K/gzcF9KRWmHd1jB+mjf9/ok1ks7XA==",
+  "dgSpecHash": "NcAC1uUdoNOhy/xmPacf71mMZTyyEOWaFwaVRxB+8pda0aS4QZeKku9dCTMsTVJskgUg0AOHP5ACtkO8XYEsRQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Admin-Forth\\Desktop\\UsersInformation\\userInformation\\userInformation.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\anglesharp\\1.0.1\\anglesharp.1.0.1.nupkg.sha512",
+    "C:\\Users\\Admin-Forth\\.nuget\\packages\\aspnet.webapi.cookiespassthrough\\1.0.0\\aspnet.webapi.cookiespassthrough.1.0.0.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\automapper\\12.0.0\\automapper.12.0.0.nupkg.sha512",
+    "C:\\Users\\Admin-Forth\\.nuget\\packages\\azure.core\\1.33.0\\azure.core.1.33.0.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\custis.efcore.dbcomments\\6.0.1\\custis.efcore.dbcomments.6.0.1.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\custis.netcore.apphost.contracts\\46.3.0\\custis.netcore.apphost.contracts.46.3.0.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\custis.netcore.auth.contracts\\46.3.0\\custis.netcore.auth.contracts.46.3.0.nupkg.sha512",
@@ -56,6 +58,7 @@
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\lucene.net.queryparser\\4.8.0-beta00016\\lucene.net.queryparser.4.8.0-beta00016.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\lucene.net.sandbox\\4.8.0-beta00016\\lucene.net.sandbox.4.8.0-beta00016.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\microsoft.aspnet.webapi.client\\5.2.9\\microsoft.aspnet.webapi.client.5.2.9.nupkg.sha512",
+    "C:\\Users\\Admin-Forth\\.nuget\\packages\\microsoft.aspnet.webapi.core\\5.0.0\\microsoft.aspnet.webapi.core.5.0.0.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.19\\microsoft.aspnetcore.authentication.jwtbearer.6.0.19.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\microsoft.aspnetcore.authorization\\7.0.8\\microsoft.aspnetcore.authorization.7.0.8.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\microsoft.aspnetcore.http\\2.2.2\\microsoft.aspnetcore.http.2.2.2.nupkg.sha512",
@@ -63,6 +66,7 @@
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\microsoft.aspnetcore.http.features\\2.2.0\\microsoft.aspnetcore.http.features.2.2.0.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\microsoft.aspnetcore.metadata\\7.0.8\\microsoft.aspnetcore.metadata.7.0.8.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\microsoft.aspnetcore.webutilities\\2.2.0\\microsoft.aspnetcore.webutilities.2.2.0.nupkg.sha512",
+    "C:\\Users\\Admin-Forth\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\microsoft.entityframeworkcore\\6.0.10\\microsoft.entityframeworkcore.6.0.10.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\6.0.10\\microsoft.entityframeworkcore.abstractions.6.0.10.nupkg.sha512",
@@ -155,11 +159,13 @@
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\system.io.pipelines\\6.0.3\\system.io.pipelines.6.0.3.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\system.linq\\4.3.0\\system.linq.4.3.0.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\system.linq.expressions\\4.3.0\\system.linq.expressions.4.3.0.nupkg.sha512",
+    "C:\\Users\\Admin-Forth\\.nuget\\packages\\system.memory.data\\1.0.2\\system.memory.data.1.0.2.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\system.net.http\\4.3.4\\system.net.http.4.3.4.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\system.net.primitives\\4.3.0\\system.net.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\system.net.requests\\4.3.0\\system.net.requests.4.3.0.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\system.net.sockets\\4.3.0\\system.net.sockets.4.3.0.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\system.net.webheadercollection\\4.3.0\\system.net.webheadercollection.4.3.0.nupkg.sha512",
+    "C:\\Users\\Admin-Forth\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\system.objectmodel\\4.3.0\\system.objectmodel.4.3.0.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\system.reflection\\4.3.0\\system.reflection.4.3.0.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\system.reflection.emit\\4.3.0\\system.reflection.emit.4.3.0.nupkg.sha512",
@@ -202,5 +208,26 @@
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\Admin-Forth\\.nuget\\packages\\vds.common\\1.10.0\\vds.common.1.10.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'AspNet.WebApi.CookiesPassthrough 1.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "libraryId": "AspNet.WebApi.CookiesPassthrough",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Microsoft.AspNet.WebApi.Core 5.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "libraryId": "Microsoft.AspNet.WebApi.Core",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    }
+  ]
 }

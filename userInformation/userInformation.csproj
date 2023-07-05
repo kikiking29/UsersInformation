@@ -97,6 +97,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNet.WebApi.CookiesPassthrough" Version="1.0.0" />
+    <PackageReference Include="Azure.Core" Version="1.33.0" />
     <PackageReference Include="CUSTIS.NetCore.AuthZ.Permissions" Version="46.3.0" />
     <PackageReference Include="JwtSharp" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.19" />

@@ -41,6 +41,14 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "AspNet.WebApi.CookiesPassthrough": {
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
+            "Azure.Core": {
+              "target": "Package",
+              "version": "[1.33.0, )"
+            },
             "CUSTIS.NetCore.AuthZ.Permissions": {
               "target": "Package",
               "version": "[46.3.0, )"

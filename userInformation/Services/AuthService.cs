@@ -8,12 +8,14 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace userInformation.Services
 {
     public class AuthService : IAuthService
     {
         readonly ITokenService tokenService;
+
         private readonly IHttpContextAccessor httpContextAccessor;
         connecDb conn = new connecDb();
         public AuthService( ITokenService tokenService, IHttpContextAccessor httpContextAccessor)
@@ -32,9 +34,6 @@ namespace userInformation.Services
             pass.username = request.Username;
             pass.old_password = request.Password;
             passwrd = conn.ChackPassword(pass);
-
-            
-
            
 
             if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
@@ -52,7 +51,7 @@ namespace userInformation.Services
                 response.AccessTokenExpireDate = genTokenresponse.Result.TokenExpireDate;
                 response.AuthenticateResult = true;
                 response.AuthToken = genTokenresponse.Result.Token;
-               
+
             }
             return Task.FromResult(response);
         }

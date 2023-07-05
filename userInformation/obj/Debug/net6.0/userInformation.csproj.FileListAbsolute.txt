@@ -286,3 +286,8 @@ C:\Users\Admin-Forth\Desktop\UsersInformation\userInformation\bin\Debug\net6.0\n
 C:\Users\Admin-Forth\Desktop\UsersInformation\userInformation\bin\Debug\net6.0\pt-BR\Hangfire.Core.resources.dll
 C:\Users\Admin-Forth\Desktop\UsersInformation\userInformation\bin\Debug\net6.0\zh-TW\Hangfire.Core.resources.dll
 C:\Users\Admin-Forth\Desktop\UsersInformation\userInformation\bin\Debug\net6.0\zh\Hangfire.Core.resources.dll
+C:\Users\Admin-Forth\Desktop\UsersInformation\userInformation\bin\Debug\net6.0\AspNet.WebApi.CookiesPassthrough.dll
+C:\Users\Admin-Forth\Desktop\UsersInformation\userInformation\bin\Debug\net6.0\Azure.Core.dll
+C:\Users\Admin-Forth\Desktop\UsersInformation\userInformation\bin\Debug\net6.0\System.Web.Http.dll
+C:\Users\Admin-Forth\Desktop\UsersInformation\userInformation\bin\Debug\net6.0\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\Admin-Forth\Desktop\UsersInformation\userInformation\bin\Debug\net6.0\System.Memory.Data.dll

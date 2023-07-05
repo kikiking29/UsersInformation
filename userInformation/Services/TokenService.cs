@@ -6,6 +6,9 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
+using System.Net;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore;
 
 namespace userInformation.Services
 {
@@ -40,6 +43,8 @@ namespace userInformation.Services
 
             var claimsIdentity = new ClaimsIdentity(jwt.Claims, "MyAuthScheme");
             httpContextAccessor.HttpContext.SignInAsync("MyAuthScheme", new ClaimsPrincipal(claimsIdentity), new AuthenticationProperties());
+            //httpContextAccessor.HttpContext.User = new ClaimsPrincipal(claimsIdentity);
+            //RefreshLoginAsync();
 
             tokenResponse = new GenerateTokenResponse()
             {
@@ -49,5 +54,35 @@ namespace userInformation.Services
 
             return Task.FromResult(tokenResponse);
         }
+
+        public async Task RefreshLoginAsync()
+        {
+            try
+            {
+
+
+                if (httpContextAccessor.HttpContext == null)
+                    return ;
+
+
+                
+                var userManager = httpContextAccessor.HttpContext.RequestServices.GetRequiredService<UserManager<IdentityUser>>();
+                var signInManager = httpContextAccessor.HttpContext.RequestServices.GetRequiredService<SignInManager<IdentityUser>>();
+                IdentityUser user = await userManager.GetUserAsync(httpContextAccessor.HttpContext.User);
+
+
+                if (signInManager.IsSignedIn(httpContextAccessor.HttpContext.User))
+                {
+                    await signInManager.RefreshSignInAsync(user);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+        }
+
     }
 }

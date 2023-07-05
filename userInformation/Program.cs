@@ -18,13 +18,19 @@ namespace userInformation
 {
     public class Program
     {
-        
+        public Program(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+        public IConfiguration Configuration { get; }
 
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            builder.Services.AddControllersWithViews();
 
             builder.Services.AddControllers();
             builder.Services.AddConnections();
@@ -116,7 +122,9 @@ namespace userInformation
         }
 
     }
+
 }
+
 
 
 //var securityScheme = new OpenApiSecurityScheme()
