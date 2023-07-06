@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin-Forth\\Desktop\\UsersInformation\\userInformation\\userInformation.csproj": {}
+    "C:\\Users\\jukri\\OneDrive\\เดสก์ท็อป\\UsersInformation\\userInformation\\userInformation.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin-Forth\\Desktop\\UsersInformation\\userInformation\\userInformation.csproj": {
+    "C:\\Users\\jukri\\OneDrive\\เดสก์ท็อป\\UsersInformation\\userInformation\\userInformation.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin-Forth\\Desktop\\UsersInformation\\userInformation\\userInformation.csproj",
+        "projectUniqueName": "C:\\Users\\jukri\\OneDrive\\เดสก์ท็อป\\UsersInformation\\userInformation\\userInformation.csproj",
         "projectName": "userInformation",
-        "projectPath": "C:\\Users\\Admin-Forth\\Desktop\\UsersInformation\\userInformation\\userInformation.csproj",
-        "packagesPath": "C:\\Users\\Admin-Forth\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin-Forth\\Desktop\\UsersInformation\\userInformation\\obj\\",
+        "projectPath": "C:\\Users\\jukri\\OneDrive\\เดสก์ท็อป\\UsersInformation\\userInformation\\userInformation.csproj",
+        "packagesPath": "C:\\Users\\jukri\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jukri\\OneDrive\\เดสก์ท็อป\\UsersInformation\\userInformation\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Admin-Forth\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\jukri\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -48,6 +48,10 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"
+            },
+            "Swashbuckle.AspNetCore.Filters": {
+              "target": "Package",
+              "version": "[7.0.6, )"
             },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",

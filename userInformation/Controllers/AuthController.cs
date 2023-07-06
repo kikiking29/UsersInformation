@@ -8,6 +8,7 @@ using userInformation;
 using userInformation.Services.UserService;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
+using userInformation.ConnecDb;
 
 namespace JwtWebApiTutorial.Controllers
 {
@@ -26,37 +27,29 @@ namespace JwtWebApiTutorial.Controllers
             _userService = userService;
         }
 
-        [HttpGet, Authorize]
-        public ActionResult<string> GetMe()
-        {
-            var userName = _userService.GetMyName();
-            return Ok(userName);
-        }
-
-        [HttpPost("register")]
-        public async Task<ActionResult<User>> Register(UserDto request)
-        {
+        [HttpPost("login")]
+        public async Task<ActionResult<string>> Login(UserDto request)
+        {            
+            PasswordModels pass = new PasswordModels();
+            pass.username = request.Username;
+            pass.old_password= request.Password;
+            connecDb conn = new connecDb();
+            pass = conn.ChackPassword(pass);
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             user.Username = request.Username;
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
-            return Ok(user);
-        }
-
-        [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(UserDto request)
-        {
-            if (user.Username != request.Username)
+            if (pass == null)
             {
                 return BadRequest("User not found.");
             }
-
             if (!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
             {
                 return BadRequest("Wrong password.");
             }
+            user.Username = request.Username;
 
             string token = CreateToken(user);
 
@@ -115,19 +108,18 @@ namespace JwtWebApiTutorial.Controllers
 
         private string CreateToken(User user)
         {
-            List<Claim> claims = new List<Claim>
+           
+
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha384);
+
+            var token = new JwtSecurityToken(
+                claims: new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.Role, "Admin")
-            };
-
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-                _configuration.GetSection("AppSettings:Token").Value));
-
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            var token = new JwtSecurityToken(
-                claims: claims,
+            },
                 expires: DateTime.Now.AddDays(1),
                 signingCredentials: creds);
 
@@ -138,7 +130,7 @@ namespace JwtWebApiTutorial.Controllers
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
-            using (var hmac = new HMACSHA512())
+            using (var hmac = new HMACSHA384())
             {
                 passwordSalt = hmac.Key;
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
@@ -147,7 +139,7 @@ namespace JwtWebApiTutorial.Controllers
 
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
-            using (var hmac = new HMACSHA512(passwordSalt))
+            using (var hmac = new HMACSHA384(passwordSalt))
             {
                 var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 return computedHash.SequenceEqual(passwordHash);
