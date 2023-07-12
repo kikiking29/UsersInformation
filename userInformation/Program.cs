@@ -1,6 +1,8 @@
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using userInformation.Services.UserService;
+using userInformation.Services;
 
 namespace userInformation
 {
@@ -18,18 +20,35 @@ namespace userInformation
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddHttpContextAccessor();
 
-            builder.Services.AddSwaggerGen(options =>
-            {
-                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-                {
-                    Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
-                    In = ParameterLocation.Header,
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey
-                });
+            builder.Services.AddSwaggerGen();
 
-                options.OperationFilter<SecurityRequirementsOperationFilter>();
+            builder.Services.AddTransient<CustomCookieAuthenticationEvents>();
+            builder.Services.AddHttpContextAccessor();
+
+            builder.Services.AddAuthorization(builder =>
+            {
+                builder.AddPolicy("mypolicy", pb => pb
+                .RequireAuthenticatedUser()
+                .RequireClaim("doesntexist", "nonse")
+                );
             });
+
+
+            builder.Services.AddAuthorization();
+            builder.Services.AddEndpointsApiExplorer();
+
+            //builder.Services.AddAuthentication("MyAuthScheme")
+            //.AddCookie("MyAuthScheme", options =>
+            //{
+
+            //    options.Cookie.SameSite = SameSiteMode.Lax;
+            //    options.Cookie.Name = ".AspNet.SharedCookie";
+            //    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+            //    options.Cookie.MaxAge = options.ExpireTimeSpan;
+            //    options.SlidingExpiration = true;
+            //    options.EventsType = typeof(CustomCookieAuthenticationEvents);
+            //});
+
             builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
             policy =>
             {
@@ -52,7 +71,6 @@ namespace userInformation
 
             app.UseAuthorization();
 
-            app.UseAuthorization();
 
             app.MapControllers();
 

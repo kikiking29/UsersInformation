@@ -11,34 +11,42 @@ using Microsoft.IdentityModel.Tokens;
 using userInformation.ConnecDb;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 
 namespace JwtWebApiTutorial.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    
     public class AuthController : ControllerBase
     {
         private const string TicketIssuedTicks = nameof(TicketIssuedTicks);
         
 
         public static User user = new User();
+        PasswordModels pass = new PasswordModels();
+        connecDb conn = new connecDb();
+        RoleModle status = new RoleModle();
+        
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
-
-        public AuthController(IConfiguration configuration, IUserService userService)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public AuthController(IConfiguration configuration, IUserService userService, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
             _userService = userService;
+            _httpContextAccessor = httpContextAccessor; 
         }
 
         [HttpPost("login")]
+        //[ValidateAntiForgeryToken]
+        [AllowAnonymous]
+
         public async Task<ActionResult<string>> Login(UserDto request)
         {            
-            PasswordModels pass = new PasswordModels();
+           
             pass.username = request.Username;
             pass.old_password= request.Password;
-            connecDb conn = new connecDb();
             pass = conn.ChackPassword(pass);
+            user.UserId = pass.usersId;
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             user.Username = request.Username;
@@ -64,6 +72,7 @@ namespace JwtWebApiTutorial.Controllers
         }
 
         [HttpPost("refresh-token")]
+        
         public async Task<ActionResult<string>> RefreshToken()
         {
             var refreshToken = Request.Cookies["refreshToken"];
@@ -84,45 +93,22 @@ namespace JwtWebApiTutorial.Controllers
             return Ok(token);
         }
 
-        public  async Task ValidatePrincipal(CookieValidatePrincipalContext context)
+        [HttpGet("Logout")]
+      
+        public async Task LogoutUseAsync()
         {
-            var ticketIssuedTicksValue = context.Properties.GetString(TicketIssuedTicks);
-
-            if (ticketIssuedTicksValue is null || !long.TryParse(ticketIssuedTicksValue, out var ticketIssuedTicks))
-            {
-                await RejectPrincipalAsync(context);
-                return;
-            }
-
-
-            var ticketIssuedUtc = new DateTimeOffset(ticketIssuedTicks, TimeSpan.FromHours(0));
-            if (DateTimeOffset.UtcNow - ticketIssuedUtc > TimeSpan.FromMinutes(1))
-            {
-                if ()
-                {
-
-                }
-                return;
-            }
-
-            await ValidatePrincipal(context);
-        }
-        SignOut status = new SignOut();
-        private  async Task RejectPrincipalAsync(CookieValidatePrincipalContext context)
-        {
-            SignOut sign = new SignOut();
-            status
-            context.RejectPrincipal();
-            await context.HttpContext.SignOutAsync();
+            await _httpContextAccessor.HttpContext.SignOutAsync(new AuthenticationProperties() { IsPersistent = true });
 
         }
+
+
 
         private RefreshToken GenerateRefreshToken()
         {
             var refreshToken = new RefreshToken
             {
                 Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
-                Expires = DateTime.Now.AddDays(7),
+                Expires = DateTime.Now.AddMinutes(5),
                 Created = DateTime.Now
             };
 
@@ -150,18 +136,25 @@ namespace JwtWebApiTutorial.Controllers
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha384);
+            status = conn.Getrole(user.UserId);
 
             var token = new JwtSecurityToken(
-                claims: new List<Claim>
-            {
+                issuer: _configuration["AppSettings:Issuer"],
+                audience: _configuration["AppSettings:Audience"],
+                claims: new List<Claim> {
+                new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()),
+                new Claim("session", Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, "Admin")
-            },
-                expires: DateTime.Now.AddDays(1),
+                new Claim(ClaimTypes.Role, status.status)
+                },
+                expires: DateTime.Now.AddMinutes(5),
                 signingCredentials: creds);
 
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+            //var claimsIdentity = new ClaimsIdentity(token.Claims, "MyAuthScheme");
+            //_httpContextAccessor.HttpContext.SignInAsync("MyAuthScheme", new ClaimsPrincipal(claimsIdentity), new AuthenticationProperties());
 
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+            
             return jwt;
         }
 

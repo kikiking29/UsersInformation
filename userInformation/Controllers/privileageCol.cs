@@ -8,9 +8,11 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Xml.Linq;
 using MySql.Data.MySqlClient;
 using userInformation.Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace userInformation.Controllers
 {
+    
     public class privileageCol : ControllerBase
     {
         connecDb conn = new connecDb();
@@ -22,6 +24,7 @@ namespace userInformation.Controllers
 
         [HttpGet]
         [Route("Privileage")]
+        
         public List<PrivileageModels> Getprivileagedataall(){
 
             List<PrivileageModels> privileages = new List<PrivileageModels>();
