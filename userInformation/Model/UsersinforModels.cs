@@ -94,4 +94,8 @@ namespace userInformation.Model
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
     }
+    public class SignOut
+    {
+        public bool status { get; set; } = false;
+    }
 }

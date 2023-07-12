@@ -9,6 +9,8 @@ using userInformation.Services.UserService;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using userInformation.ConnecDb;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace JwtWebApiTutorial.Controllers
 {
@@ -16,6 +18,8 @@ namespace JwtWebApiTutorial.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+        private const string TicketIssuedTicks = nameof(TicketIssuedTicks);
+        
 
         public static User user = new User();
         private readonly IConfiguration _configuration;
@@ -78,6 +82,39 @@ namespace JwtWebApiTutorial.Controllers
             SetRefreshToken(newRefreshToken);
 
             return Ok(token);
+        }
+
+        public  async Task ValidatePrincipal(CookieValidatePrincipalContext context)
+        {
+            var ticketIssuedTicksValue = context.Properties.GetString(TicketIssuedTicks);
+
+            if (ticketIssuedTicksValue is null || !long.TryParse(ticketIssuedTicksValue, out var ticketIssuedTicks))
+            {
+                await RejectPrincipalAsync(context);
+                return;
+            }
+
+
+            var ticketIssuedUtc = new DateTimeOffset(ticketIssuedTicks, TimeSpan.FromHours(0));
+            if (DateTimeOffset.UtcNow - ticketIssuedUtc > TimeSpan.FromMinutes(1))
+            {
+                if ()
+                {
+
+                }
+                return;
+            }
+
+            await ValidatePrincipal(context);
+        }
+        SignOut status = new SignOut();
+        private  async Task RejectPrincipalAsync(CookieValidatePrincipalContext context)
+        {
+            SignOut sign = new SignOut();
+            status
+            context.RejectPrincipal();
+            await context.HttpContext.SignOutAsync();
+
         }
 
         private RefreshToken GenerateRefreshToken()
