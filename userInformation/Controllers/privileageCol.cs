@@ -24,7 +24,7 @@ namespace userInformation.Controllers
 
         [HttpGet]
         [Route("Privileage")]
-        
+        [Authorize]
         public List<PrivileageModels> Getprivileagedataall(){
 
             List<PrivileageModels> privileages = new List<PrivileageModels>();

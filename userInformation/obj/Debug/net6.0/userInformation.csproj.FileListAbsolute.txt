@@ -222,3 +222,6 @@ C:\Users\Admin-Forth\Desktop\UsersInformation\userInformation\bin\Debug\net6.0\S
 C:\Users\Admin-Forth\Desktop\UsersInformation\userInformation\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.dll
 C:\Users\Admin-Forth\Desktop\UsersInformation\userInformation\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll
 C:\Users\Admin-Forth\Desktop\UsersInformation\userInformation\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\Admin-Forth\Desktop\UsersInformation\userInformation\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Admin-Forth\Desktop\UsersInformation\userInformation\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\Admin-Forth\Desktop\UsersInformation\userInformation\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll

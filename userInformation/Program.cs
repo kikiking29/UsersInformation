@@ -1,13 +1,17 @@
-using Google.Protobuf.WellKnownTypes;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
+
 using userInformation.Services.UserService;
 using userInformation.Services;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace userInformation
 {
     public class Program
     {
+        
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -16,63 +20,85 @@ namespace userInformation
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
+        
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddHttpContextAccessor();
+        
 
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddTransient<CustomCookieAuthenticationEvents>();
             builder.Services.AddHttpContextAccessor();
 
-            builder.Services.AddAuthorization(builder =>
-            {
-                builder.AddPolicy("mypolicy", pb => pb
-                .RequireAuthenticatedUser()
-                .RequireClaim("doesntexist", "nonse")
-                );
-            });
+            //builder.Services.AddAuthorization(builder =>
+            //{
+            //    builder.AddPolicy("mypolicy", pb => pb
+            //    .RequireAuthenticatedUser()
+            //    .RequireClaim("doesntexist", "nonse")
+            //    );
+            //});
 
 
             builder.Services.AddAuthorization();
             builder.Services.AddEndpointsApiExplorer();
-
-            //builder.Services.AddAuthentication("MyAuthScheme")
-            //.AddCookie("MyAuthScheme", options =>
+            //builder.Services.AddSwaggerGen(options =>
             //{
+            //    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+            //    {
+            //        Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
+            //        In = ParameterLocation.Header,
+            //        Name = "Authorization",
+            //        Type = SecuritySchemeType.ApiKey
+            //    });
 
-            //    options.Cookie.SameSite = SameSiteMode.Lax;
-            //    options.Cookie.Name = ".AspNet.SharedCookie";
-            //    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-            //    options.Cookie.MaxAge = options.ExpireTimeSpan;
-            //    options.SlidingExpiration = true;
-            //    options.EventsType = typeof(CustomCookieAuthenticationEvents);
+            //    options.OperationFilter<SecurityRequirementsOperationFilter>();
             //});
 
-            builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
-            policy =>
-            {
-                policy.WithOrigins("http://localhost:44385").AllowAnyMethod().AllowAnyHeader();
-            }));
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+             .AddJwtBearer(options =>
+             {
+                 options.TokenValidationParameters = new TokenValidationParameters
+                 {
+                     ValidateIssuerSigningKey = true,
+                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+                     ValidateIssuer = false,
+                     ValidateAudience = false,
+                     ValidateLifetime = true,
+                 };
+             });
+            builder.Services.AddRazorPages();
+
+            //builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
+            //policy =>
+            //{
+            //    policy.WithOrigins("http://localhost:44385").AllowAnyMethod().AllowAnyHeader();
+            //}));
 
 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-            app.UseCors("NgOrigins");
-
+            //if (app.Environment.IsDevelopment())
+            //{
+              
+            //}
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            //app.UseCors("NgOrigins");
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 
+            app.UseRouting();
             app.UseAuthorization();
 
+            app.UseAuthentication();
 
-            app.MapControllers();
+            
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapRazorPages();
+            });
 
             app.Run();
         }

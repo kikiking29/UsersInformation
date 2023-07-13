@@ -9,5 +9,7 @@
         public string RefreshToken { get; set; } = string.Empty;
         public DateTime TokenCreated { get; set; }
         public DateTime TokenExpires { get; set; }
+
+        public string Role { get; set; }
     }
 }

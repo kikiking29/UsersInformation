@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -9,13 +8,11 @@ using userInformation.Services.UserService;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using userInformation.ConnecDb;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
 
 namespace JwtWebApiTutorial.Controllers
 {
-    
+    [Route("api/[controller]")]
+    [ApiController]
     public class AuthController : ControllerBase
     {
         private const string TicketIssuedTicks = nameof(TicketIssuedTicks);
@@ -28,17 +25,21 @@ namespace JwtWebApiTutorial.Controllers
         
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public AuthController(IConfiguration configuration, IUserService userService, IHttpContextAccessor httpContextAccessor)
+        public AuthController(IConfiguration configuration, IUserService userService)
         {
             _configuration = configuration;
             _userService = userService;
-            _httpContextAccessor = httpContextAccessor; 
         }
 
+        [HttpGet, Authorize]
+        public ActionResult<string> GetMe()
+        {
+            var userName = _userService.GetMyName();
+            return Ok(userName);
+        }
         [HttpPost("login")]
         //[ValidateAntiForgeryToken]
-        [AllowAnonymous]
+        //[AllowAnonymous]
 
         public async Task<ActionResult<string>> Login(UserDto request)
         {            
@@ -93,16 +94,6 @@ namespace JwtWebApiTutorial.Controllers
             return Ok(token);
         }
 
-        [HttpGet("Logout")]
-      
-        public async Task LogoutUseAsync()
-        {
-            await _httpContextAccessor.HttpContext.SignOutAsync(new AuthenticationProperties() { IsPersistent = true });
-
-        }
-
-
-
         private RefreshToken GenerateRefreshToken()
         {
             var refreshToken = new RefreshToken
@@ -131,13 +122,11 @@ namespace JwtWebApiTutorial.Controllers
 
         private string CreateToken(User user)
         {
-           
-
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha384);
             status = conn.Getrole(user.UserId);
-
+            user.Role = status.status;
             var token = new JwtSecurityToken(
                 issuer: _configuration["AppSettings:Issuer"],
                 audience: _configuration["AppSettings:Audience"],
@@ -145,14 +134,11 @@ namespace JwtWebApiTutorial.Controllers
                 new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()),
                 new Claim("session", Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, status.status)
+                new Claim(ClaimTypes.Role,  user.Role)
                 },
                 expires: DateTime.Now.AddMinutes(5),
                 signingCredentials: creds);
-
-            //var claimsIdentity = new ClaimsIdentity(token.Claims, "MyAuthScheme");
-            //_httpContextAccessor.HttpContext.SignInAsync("MyAuthScheme", new ClaimsPrincipal(claimsIdentity), new AuthenticationProperties());
-
+          
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             
             return jwt;
@@ -175,5 +161,8 @@ namespace JwtWebApiTutorial.Controllers
                 return computedHash.SequenceEqual(passwordHash);
             }
         }
+
+
+
     }
 }
