@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.ComponentModel.DataAnnotations;
 
 namespace userInformation.Model
 {
@@ -89,9 +89,13 @@ namespace userInformation.Model
         public string status { get; set; }
     }
 
+    
     public class UserDto
     {
+        [Required]
         public string Username { get; set; } = string.Empty;
+        
+        [Required]
         public string Password { get; set; } = string.Empty;
     }
     public class SignOut

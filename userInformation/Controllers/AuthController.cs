@@ -119,14 +119,14 @@ namespace JwtWebApiTutorial.Controllers
             user.TokenCreated = newRefreshToken.Created;
             user.TokenExpires = newRefreshToken.Expires;
         }
-
+        
         private string CreateToken(User user)
         {
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha384);
             status = conn.Getrole(user.UserId);
-            user.Role = status.status;
+
             var token = new JwtSecurityToken(
                 issuer: _configuration["AppSettings:Issuer"],
                 audience: _configuration["AppSettings:Audience"],
@@ -134,7 +134,7 @@ namespace JwtWebApiTutorial.Controllers
                 new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()),
                 new Claim("session", Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role,  user.Role)
+                new Claim(ClaimTypes.Role,  user.Role.ToString())
                 },
                 expires: DateTime.Now.AddMinutes(5),
                 signingCredentials: creds);

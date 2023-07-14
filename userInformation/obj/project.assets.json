@@ -2,6 +2,22 @@
   "version": 3,
   "targets": {
     "net6.0": {
+      "Architect.DomainModeling/2.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "compile": {
+          "lib/net6.0/Architect.DomainModeling.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Architect.DomainModeling.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Google.Protobuf/3.21.9": {
         "type": "package",
         "compile": {
@@ -476,6 +492,19 @@
           "runtimes/win-x64/native/krbcc64.dll": {
             "assetType": "native",
             "rid": "win-x64"
+          }
+        }
+      },
+      "Newtonsoft.Json/13.0.3": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
           }
         }
       },
@@ -1005,6 +1034,25 @@
     }
   },
   "libraries": {
+    "Architect.DomainModeling/2.0.0": {
+      "sha512": "+bQ9v2gCRn3OqHu539iwoyl86p3r073sTJJprHauP8g0VeFU26vcphOLK5ryj43x3Q3JbW4TNgmHHRSU39xEnQ==",
+      "type": "package",
+      "path": "architect.domainmodeling/2.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "analyzers/dotnet/cs/Architect.DomainModeling.Generator.dll",
+        "architect.domainmodeling.2.0.0.nupkg.sha512",
+        "architect.domainmodeling.nuspec",
+        "lib/net5.0/Architect.DomainModeling.dll",
+        "lib/net5.0/Architect.DomainModeling.xml",
+        "lib/net6.0/Architect.DomainModeling.dll",
+        "lib/net6.0/Architect.DomainModeling.xml",
+        "lib/net7.0/Architect.DomainModeling.dll",
+        "lib/net7.0/Architect.DomainModeling.xml"
+      ]
+    },
     "Google.Protobuf/3.21.9": {
       "sha512": "OTpFujTgkmqMLbg3KT7F/iuKi1rg6s5FCS2M9XcVLDn40zL8wgXm37CY/F6MeOEXKjdcnXGCN/h7oyMkVydVsg==",
       "type": "package",
@@ -1590,6 +1638,36 @@
         "runtimes/win-x64/native/k5sprt64.dll",
         "runtimes/win-x64/native/krb5_64.dll",
         "runtimes/win-x64/native/krbcc64.dll"
+      ]
+    },
+    "Newtonsoft.Json/13.0.3": {
+      "sha512": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
+      "type": "package",
+      "path": "newtonsoft.json/13.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "lib/net20/Newtonsoft.Json.dll",
+        "lib/net20/Newtonsoft.Json.xml",
+        "lib/net35/Newtonsoft.Json.dll",
+        "lib/net35/Newtonsoft.Json.xml",
+        "lib/net40/Newtonsoft.Json.dll",
+        "lib/net40/Newtonsoft.Json.xml",
+        "lib/net45/Newtonsoft.Json.dll",
+        "lib/net45/Newtonsoft.Json.xml",
+        "lib/net6.0/Newtonsoft.Json.dll",
+        "lib/net6.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.0/Newtonsoft.Json.dll",
+        "lib/netstandard1.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.3/Newtonsoft.Json.dll",
+        "lib/netstandard1.3/Newtonsoft.Json.xml",
+        "lib/netstandard2.0/Newtonsoft.Json.dll",
+        "lib/netstandard2.0/Newtonsoft.Json.xml",
+        "newtonsoft.json.13.0.3.nupkg.sha512",
+        "newtonsoft.json.nuspec",
+        "packageIcon.png"
       ]
     },
     "Portable.BouncyCastle/1.9.0": {
@@ -2935,6 +3013,7 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "Architect.DomainModeling >= 2.0.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 6.0.20",
       "Microsoft.AspNetCore.Http >= 2.2.2",
       "MySql.Data >= 8.0.33",
@@ -2983,6 +3062,10 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
+          "Architect.DomainModeling": {
+            "target": "Package",
+            "version": "[2.0.0, )"
+          },
           "Microsoft.AspNetCore.Authentication.JwtBearer": {
             "target": "Package",
             "version": "[6.0.20, )"

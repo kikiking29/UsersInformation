@@ -6,6 +6,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace userInformation
 {
@@ -22,21 +24,19 @@ namespace userInformation
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         
             builder.Services.AddScoped<IUserService, UserService>();
-        
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+            });
+
+
 
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddTransient<CustomCookieAuthenticationEvents>();
             builder.Services.AddHttpContextAccessor();
-
-            //builder.Services.AddAuthorization(builder =>
-            //{
-            //    builder.AddPolicy("mypolicy", pb => pb
-            //    .RequireAuthenticatedUser()
-            //    .RequireClaim("doesntexist", "nonse")
-            //    );
-            //});
-
 
             builder.Services.AddAuthorization();
             builder.Services.AddEndpointsApiExplorer();
@@ -67,6 +67,7 @@ namespace userInformation
              });
             builder.Services.AddRazorPages();
 
+
             //builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
             //policy =>
             //{
@@ -79,8 +80,12 @@ namespace userInformation
             // Configure the HTTP request pipeline.
             //if (app.Environment.IsDevelopment())
             //{
-              
+
             //}
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
             app.UseSwagger();
             app.UseSwaggerUI();
             //app.UseCors("NgOrigins");

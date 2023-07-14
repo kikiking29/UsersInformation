@@ -1,4 +1,6 @@
-﻿namespace userInformation
+﻿using userInformation.Entities;
+
+namespace userInformation
 {
     public class User
     {
@@ -10,6 +12,6 @@
         public DateTime TokenCreated { get; set; }
         public DateTime TokenExpires { get; set; }
 
-        public string Role { get; set; }
+        public Role Role { get; set; }
     }
 }
