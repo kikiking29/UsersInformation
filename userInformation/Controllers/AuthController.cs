@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using userInformation.Model;
@@ -8,6 +7,9 @@ using userInformation.Services.UserService;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using userInformation.ConnecDb;
+using userInformation.Entities;
+
+using AllowAnonymousAttribute = Microsoft.AspNetCore.Authorization.AllowAnonymousAttribute;
 
 namespace JwtWebApiTutorial.Controllers
 {
@@ -16,12 +18,11 @@ namespace JwtWebApiTutorial.Controllers
     public class AuthController : ControllerBase
     {
         private const string TicketIssuedTicks = nameof(TicketIssuedTicks);
-        
+
 
         public static User user = new User();
         PasswordModels pass = new PasswordModels();
         connecDb conn = new connecDb();
-        RoleModle status = new RoleModle();
         
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
@@ -31,16 +32,10 @@ namespace JwtWebApiTutorial.Controllers
             _userService = userService;
         }
 
-        [HttpGet, Authorize]
-        public ActionResult<string> GetMe()
-        {
-            var userName = _userService.GetMyName();
-            return Ok(userName);
-        }
+
+        [AllowAnonymous]
         [HttpPost("login")]
         //[ValidateAntiForgeryToken]
-        //[AllowAnonymous]
-
         public async Task<ActionResult<string>> Login(UserDto request)
         {            
            
@@ -125,8 +120,7 @@ namespace JwtWebApiTutorial.Controllers
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha384);
-            status = conn.Getrole(user.UserId);
-
+            user.Role = conn.Getrole(user.UserId);
             var token = new JwtSecurityToken(
                 issuer: _configuration["AppSettings:Issuer"],
                 audience: _configuration["AppSettings:Audience"],

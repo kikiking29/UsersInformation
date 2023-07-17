@@ -1,18 +1,26 @@
-﻿namespace userInformation.Authorization
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+
+using userInformation.ConnecDb;
+using userInformation.Entities;
+using userInformation.Controllers;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+
+namespace userInformation.Authorization
 {
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Filters;
-    using System.Linq;
-    using userInformation.Entities;
+   
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class AuthorizeAttribute : Attribute, IAuthorizationFilter
     {
         private readonly IList<Role> _roles;
-
+        public readonly User user = new User();
+        
         public AuthorizeAttribute(params Role[] roles)
         {
             _roles = roles ?? new Role[] { };
+           
         }
 
         public void OnAuthorization(AuthorizationFilterContext context)
@@ -23,7 +31,10 @@
                 return;
 
             // authorization
+
+
             var user = (User)context.HttpContext.Items["User"];
+            //user = context.HttpContext.Features.Get<User>();
             if (user == null || (_roles.Any() && !_roles.Contains(user.Role)))
             {
                 // not logged in or role not authorized

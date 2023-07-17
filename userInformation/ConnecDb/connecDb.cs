@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System.Data;
+using userInformation.Entities;
 using userInformation.Model;
 
 namespace userInformation.ConnecDb
@@ -53,10 +54,9 @@ namespace userInformation.ConnecDb
             return passwrd;
         }
 
-        public RoleModle Getrole (int id)
+        public Role Getrole (int id)
         {
             PrivileageModels pau = new PrivileageModels();
-            RoleModle status = new RoleModle();
             MySqlConnection connection = new MySqlConnection(connectionstring);
             DataSet ds = new DataSet();
             connection.Open();
@@ -76,17 +76,20 @@ namespace userInformation.ConnecDb
                     candrop = dr["candrop"].ToString()
                 };
             }
+            connection.Close();
             if (pau.candrop != "0" )
             {
-                status.status = "Admin";
+                return Role.Admin;
             }
             else
             {
-                status.status = "User";
+                return Role.User;
             }
+          
 
-            connection.Close();
-            return status;
+
+            
+            
         }
     }
 }

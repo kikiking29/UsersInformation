@@ -9,12 +9,16 @@ using System.Xml.Linq;
 using MySql.Data.MySqlClient;
 using userInformation.Model;
 using Microsoft.AspNetCore.Authorization;
+using userInformation.Entities;
+using userInformation.Authorization;
+using AuthorizeAttribute = userInformation.Authorization.AuthorizeAttribute;
 
 namespace userInformation.Controllers
 {
     
     public class privileageCol : ControllerBase
     {
+
         connecDb conn = new connecDb();
         public class myParam
         {
@@ -22,14 +26,14 @@ namespace userInformation.Controllers
             public object value;
         }
 
+        [Authorize(Role.User)]
         [HttpGet]
         [Route("Privileage")]
-        [Authorize]
         public List<PrivileageModels> Getprivileagedataall(){
-
             List<PrivileageModels> privileages = new List<PrivileageModels>();
             try
             {
+                
                 DataSet ds = new DataSet();
                 ds = conn.Selectdata("SELECT * FROM privileage;");
 
@@ -54,6 +58,7 @@ namespace userInformation.Controllers
             return privileages;
         }
 
+        [Authorize(Role.Admin)]
         [HttpGet]
         [Route("Privileage/{id}")]
         public PrivileageModels Getbyprivileageid(int id)
@@ -90,6 +95,7 @@ namespace userInformation.Controllers
         }
 
 
+        [Authorize(Role.Admin)]
         [HttpGet]
         [Route("privileage/Usersinformation")]
         public List<PrivileageAndUsersinforModels> Getallprivileageandusers()
@@ -133,6 +139,8 @@ namespace userInformation.Controllers
             return paus;
         }
 
+
+        [Authorize(Role.Admin)]
         [HttpPost]
         [Route("Privileage")]
         public NewPrivileageModels Insertprivileage(NewPrivileageModels data)
@@ -169,6 +177,7 @@ namespace userInformation.Controllers
         }
 
 
+        [Authorize(Role.User)]
         [HttpPut]
         [Route("Privileage/{id}")]
         public PrivileageModels Updateprivileage(PrivileageModels data)
@@ -210,6 +219,8 @@ namespace userInformation.Controllers
             };
         }
 
+
+        [Authorize(Role.Admin)]
         [HttpDelete]
         [Route("Privileage/{id}")]
         public void Deleteprivileage(int id)

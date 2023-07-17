@@ -1,6 +1,4 @@
-
 using userInformation.Services.UserService;
-using userInformation.Services;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -8,6 +6,8 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication;
 
 namespace userInformation
 {
@@ -22,17 +22,23 @@ namespace userInformation
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        
+
+            builder.Services.AddCors();
             builder.Services.AddScoped<IUserService, UserService>();
 
-            builder.Services.AddAuthorization(options =>
+            //builder.Services.AddAuthorization(options =>
+            //{
+            //    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+            //        .RequireAuthenticatedUser()
+            //        .Build();
+            //});
+
+            builder.Services.AddControllers().AddJsonOptions(x =>
             {
-                options.FallbackPolicy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
+                // serialize enums as strings in api responses (e.g. Role)
+                x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
-
-
+            builder.Configuration.GetSection("AppSettings");
 
             builder.Services.AddSwaggerGen();
 
@@ -77,18 +83,13 @@ namespace userInformation
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            //if (app.Environment.IsDevelopment())
-            //{
-
-            //}
             app.UseCors(x => x
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader());
             app.UseSwagger();
             app.UseSwaggerUI();
-            //app.UseCors("NgOrigins");
+
             app.UseStaticFiles();
 
             app.UseHttpsRedirection();
@@ -98,6 +99,7 @@ namespace userInformation
 
             app.UseAuthentication();
 
+
             
             app.UseEndpoints(endpoints =>
             {
@@ -105,7 +107,11 @@ namespace userInformation
                 endpoints.MapRazorPages();
             });
 
+           
+
             app.Run();
         }
     }
+
+    
 }
