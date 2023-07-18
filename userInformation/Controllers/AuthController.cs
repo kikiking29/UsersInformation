@@ -10,6 +10,7 @@ using userInformation.ConnecDb;
 using userInformation.Entities;
 
 using AllowAnonymousAttribute = Microsoft.AspNetCore.Authorization.AllowAnonymousAttribute;
+using Org.BouncyCastle.Ocsp;
 
 namespace JwtWebApiTutorial.Controllers
 {
@@ -23,7 +24,6 @@ namespace JwtWebApiTutorial.Controllers
         public static User user = new User();
         PasswordModels pass = new PasswordModels();
         connecDb conn = new connecDb();
-        
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
         public AuthController(IConfiguration configuration, IUserService userService)
@@ -134,7 +134,7 @@ namespace JwtWebApiTutorial.Controllers
                 signingCredentials: creds);
           
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-            
+
             return jwt;
         }
 

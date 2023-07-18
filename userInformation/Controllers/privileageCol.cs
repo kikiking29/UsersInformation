@@ -10,8 +10,8 @@ using MySql.Data.MySqlClient;
 using userInformation.Model;
 using Microsoft.AspNetCore.Authorization;
 using userInformation.Entities;
-using userInformation.Authorization;
-using AuthorizeAttribute = userInformation.Authorization.AuthorizeAttribute;
+//using userInformation.Authorization;
+//using AuthorizeAttribute = userInformation.Authorization.AuthorizeAttribute;
 
 namespace userInformation.Controllers
 {
@@ -26,7 +26,7 @@ namespace userInformation.Controllers
             public object value;
         }
 
-        [Authorize(Role.User)]
+        //[Authorize(Role.User)]
         [HttpGet]
         [Route("Privileage")]
         public List<PrivileageModels> Getprivileagedataall(){
@@ -58,7 +58,7 @@ namespace userInformation.Controllers
             return privileages;
         }
 
-        [Authorize(Role.Admin)]
+        //[Authorize(Role.Admin)]
         [HttpGet]
         [Route("Privileage/{id}")]
         public PrivileageModels Getbyprivileageid(int id)
@@ -95,7 +95,7 @@ namespace userInformation.Controllers
         }
 
 
-        [Authorize(Role.Admin)]
+        //[Authorize(Role.Admin)]
         [HttpGet]
         [Route("privileage/Usersinformation")]
         public List<PrivileageAndUsersinforModels> Getallprivileageandusers()
@@ -140,7 +140,7 @@ namespace userInformation.Controllers
         }
 
 
-        [Authorize(Role.Admin)]
+        //[Authorize(Role.Admin)]
         [HttpPost]
         [Route("Privileage")]
         public NewPrivileageModels Insertprivileage(NewPrivileageModels data)
@@ -177,7 +177,7 @@ namespace userInformation.Controllers
         }
 
 
-        [Authorize(Role.User)]
+        //[Authorize(Role.User)]
         [HttpPut]
         [Route("Privileage/{id}")]
         public PrivileageModels Updateprivileage(PrivileageModels data)
@@ -220,7 +220,7 @@ namespace userInformation.Controllers
         }
 
 
-        [Authorize(Role.Admin)]
+        //[Authorize(Role.Admin)]
         [HttpDelete]
         [Route("Privileage/{id}")]
         public void Deleteprivileage(int id)

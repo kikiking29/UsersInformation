@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication;
+using userInformation.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace userInformation
 {
@@ -17,7 +19,7 @@ namespace userInformation
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            var configuration = builder.Configuration;
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -26,12 +28,11 @@ namespace userInformation
             builder.Services.AddCors();
             builder.Services.AddScoped<IUserService, UserService>();
 
-            //builder.Services.AddAuthorization(options =>
-            //{
-            //    options.FallbackPolicy = new AuthorizationPolicyBuilder()
-            //        .RequireAuthenticatedUser()
-            //        .Build();
-            //});
+
+            // For Identity
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             builder.Services.AddControllers().AddJsonOptions(x =>
             {
@@ -40,47 +41,85 @@ namespace userInformation
             });
             builder.Configuration.GetSection("AppSettings");
 
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(option =>
+            {
+                option.SwaggerDoc("v1", new OpenApiInfo { Title = "Auth API", Version = "v1" });
+                option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter a valid token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
+                });
+                option.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
+            });
+
 
             builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddAuthorization();
+          
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = configuration["AppSettings:Audience"],
+                    ValidIssuer = configuration["AppSettings:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["AppSettings:Token"]))
+                };
+            });
+
             builder.Services.AddEndpointsApiExplorer();
-            //builder.Services.AddSwaggerGen(options =>
-            //{
-            //    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-            //    {
-            //        Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
-            //        In = ParameterLocation.Header,
-            //        Name = "Authorization",
-            //        Type = SecuritySchemeType.ApiKey
-            //    });
 
-            //    options.OperationFilter<SecurityRequirementsOperationFilter>();
-            //});
 
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-             .AddJwtBearer(options =>
-             {
-                 options.TokenValidationParameters = new TokenValidationParameters
-                 {
-                     ValidateIssuerSigningKey = true,
-                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
-                     ValidateIssuer = false,
-                     ValidateAudience = false,
-                     ValidateLifetime = true,
-                 };
-             });
+
+
+
+
+
+            //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            // .AddJwtBearer(options =>
+            // {
+            //     options.TokenValidationParameters = new TokenValidationParameters
+            //     {
+            //         ValidateIssuerSigningKey = true,
+            //         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+            //         ValidateIssuer = false,
+            //         ValidateAudience = false,
+            //         ValidateLifetime = true,
+            //     };
+            // });
+
+
             builder.Services.AddRazorPages();
 
 
-            //builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
-            //policy =>
-            //{
-            //    policy.WithOrigins("http://localhost:44385").AllowAnyMethod().AllowAnyHeader();
-            //}));
-
-
+           
             var app = builder.Build();
 
             app.UseCors(x => x
