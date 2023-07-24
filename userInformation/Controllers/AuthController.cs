@@ -25,25 +25,24 @@ namespace JwtWebApiTutorial.Controllers
         public static User user = new User();
         PasswordModels pass = new PasswordModels();
         connecDb conn = new connecDb();
-        private readonly UserManager<IdentityUser> _userManager;
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
-        public AuthController(UserManager<IdentityUser> userManager, IConfiguration configuration, IUserService userService)
+        public AuthController( IConfiguration configuration, IUserService userService)
         {
             _configuration = configuration;
             _userService = userService;
-            _userManager = userManager;
+
         }
 
 
         [AllowAnonymous]
         [HttpPost("login")]
         //[ValidateAntiForgeryToken]
-        public async Task<ActionResult<string>> Login(UserDto request)
-        {            
-           
+        public ActionResult<string> Login(UserDto request)
+        {
+
             pass.username = request.Username;
-            pass.old_password= request.Password;
+            pass.old_password = request.Password;
             pass = conn.ChackPassword(pass);
             user.UserId = pass.usersId;
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
@@ -71,8 +70,8 @@ namespace JwtWebApiTutorial.Controllers
         }
 
         [HttpPost("refresh-token")]
-        
-        public async Task<ActionResult<string>> RefreshToken()
+
+        public ActionResult<string> RefreshToken()
         {
             var refreshToken = Request.Cookies["refreshToken"];
 
@@ -80,7 +79,7 @@ namespace JwtWebApiTutorial.Controllers
             {
                 return Unauthorized("Invalid Refresh Token.");
             }
-            else if(user.TokenExpires < DateTime.Now)
+            else if (user.TokenExpires < DateTime.Now)
             {
                 return Unauthorized("Token expired.");
             }
