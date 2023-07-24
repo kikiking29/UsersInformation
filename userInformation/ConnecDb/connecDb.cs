@@ -7,9 +7,9 @@ namespace userInformation.ConnecDb
 {
     public class connecDb
     {
-        string connectionstring = "Server=localhost;Database=userinformation;Uid=root;Pwd=1234;";
+        string connectionstring = "Server=localhost;Database=userinformaation;Uid=root;Pwd=1234;";
         public string connectDb() {
-            string connectionString = "Server=localhost;Database=userinformation;Uid=root;Pwd=1234;";
+            string connectionString = "Server=localhost;Database=userinformaation;Uid=root;Pwd=1234;";
             return connectionString;
         }
 
@@ -54,7 +54,7 @@ namespace userInformation.ConnecDb
             return passwrd;
         }
 
-        public Role Getrole (int id)
+        public string Getrole (int id)
         {
             PrivileageModels pau = new PrivileageModels();
             MySqlConnection connection = new MySqlConnection(connectionstring);
@@ -79,11 +79,11 @@ namespace userInformation.ConnecDb
             connection.Close();
             if (pau.candrop != "0" )
             {
-                return Role.Admin;
+                return "Admin";
             }
             else
             {
-                return Role.User;
+                return "User";
             }
           
 

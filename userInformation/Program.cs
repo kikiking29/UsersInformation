@@ -39,7 +39,10 @@ namespace userInformation
                 // serialize enums as strings in api responses (e.g. Role)
                 x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
+
             builder.Configuration.GetSection("AppSettings");
+
+            builder.Services.AddEndpointsApiExplorer();
 
             builder.Services.AddSwaggerGen(option =>
             {
@@ -94,7 +97,7 @@ namespace userInformation
                 };
             });
 
-            builder.Services.AddEndpointsApiExplorer();
+           
 
 
 

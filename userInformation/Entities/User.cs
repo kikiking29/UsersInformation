@@ -15,7 +15,7 @@ namespace userInformation.Entities
         public DateTime TokenCreated { get; set; }
         public DateTime TokenExpires { get; set; }
 
-        public Role Role { get; set; }
+        public string Role { get; set; }
 
     }
 }

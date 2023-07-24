@@ -11,6 +11,7 @@ using userInformation.Entities;
 
 using AllowAnonymousAttribute = Microsoft.AspNetCore.Authorization.AllowAnonymousAttribute;
 using Org.BouncyCastle.Ocsp;
+using Microsoft.AspNetCore.Identity;
 
 namespace JwtWebApiTutorial.Controllers
 {
@@ -24,12 +25,14 @@ namespace JwtWebApiTutorial.Controllers
         public static User user = new User();
         PasswordModels pass = new PasswordModels();
         connecDb conn = new connecDb();
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
-        public AuthController(IConfiguration configuration, IUserService userService)
+        public AuthController(UserManager<IdentityUser> userManager, IConfiguration configuration, IUserService userService)
         {
             _configuration = configuration;
             _userService = userService;
+            _userManager = userManager;
         }
 
 
@@ -128,7 +131,7 @@ namespace JwtWebApiTutorial.Controllers
                 new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()),
                 new Claim("session", Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role,  user.Role.ToString())
+                new Claim(ClaimTypes.Role,  user.Role)
                 },
                 expires: DateTime.Now.AddMinutes(5),
                 signingCredentials: creds);

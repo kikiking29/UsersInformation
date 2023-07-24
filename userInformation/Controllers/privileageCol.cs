@@ -4,7 +4,6 @@ using userInformation.ConnecDb;
 using System;
 using System.Data;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using static System.Net.Mime.MediaTypeNames;
 using System.Xml.Linq;
 using MySql.Data.MySqlClient;
 using userInformation.Model;
@@ -20,13 +19,8 @@ namespace userInformation.Controllers
     {
 
         connecDb conn = new connecDb();
-        public class myParam
-        {
-            public string name;
-            public object value;
-        }
-
-        //[Authorize(Role.User)]
+      
+        [Authorize(Roles = "User")]
         [HttpGet]
         [Route("Privileage")]
         public List<PrivileageModels> Getprivileagedataall(){
@@ -64,7 +58,7 @@ namespace userInformation.Controllers
         public PrivileageModels Getbyprivileageid(int id)
         {
             PrivileageModels privileage = new PrivileageModels();
-            myParam p = new myParam();
+           
             
             try
             {
@@ -102,8 +96,7 @@ namespace userInformation.Controllers
         {
 
             List<PrivileageAndUsersinforModels> paus = new List<PrivileageAndUsersinforModels>();
-            myParam p = new myParam();
-
+            
             try
             {
 
