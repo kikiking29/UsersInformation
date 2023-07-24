@@ -14,13 +14,13 @@ using userInformation.Entities;
 
 namespace userInformation.Controllers
 {
-    
+    [Authorize(Roles = "Admin")]
     public class privileageCol : ControllerBase
     {
 
         connecDb conn = new connecDb();
       
-        [Authorize(Roles = "User")]
+        //[Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("Privileage")]
         public List<PrivileageModels> Getprivileagedataall(){
@@ -52,7 +52,7 @@ namespace userInformation.Controllers
             return privileages;
         }
 
-        //[Authorize(Role.Admin)]
+        //[Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("Privileage/{id}")]
         public PrivileageModels Getbyprivileageid(int id)

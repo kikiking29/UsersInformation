@@ -40,44 +40,6 @@ namespace userInformation
                 x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
-            builder.Configuration.GetSection("AppSettings");
-
-            builder.Services.AddEndpointsApiExplorer();
-
-            builder.Services.AddSwaggerGen(option =>
-            {
-                option.SwaggerDoc("v1", new OpenApiInfo { Title = "Auth API", Version = "v1" });
-                option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    In = ParameterLocation.Header,
-                    Description = "Please enter a valid token",
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.Http,
-                    BearerFormat = "JWT",
-                    Scheme = "Bearer"
-                });
-                option.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
-                }
-            },
-            new string[]{}
-        }
-    });
-            });
-
-
-            builder.Services.AddHttpContextAccessor();
-
-            builder.Services.AddAuthorization();
-          
-
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -97,32 +59,48 @@ namespace userInformation
                 };
             });
 
-           
+            builder.Configuration.GetSection("AppSettings");
+
+            builder.Services.AddEndpointsApiExplorer();
+
+
+            builder.Services.AddSwaggerGen(option =>
+            {
+                option.SwaggerDoc("v1", new OpenApiInfo { Title = "Auth API", Version = "v1" });
+                option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter a valid token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
+                });
+                option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type=ReferenceType.SecurityScheme,
+                                Id="Bearer"
+                            }
+                        },
+                        new string[]{}
+                    }
+                });
+            });
+
+
+            builder.Services.AddHttpContextAccessor();
 
 
 
-
-
-
-
-            //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            // .AddJwtBearer(options =>
-            // {
-            //     options.TokenValidationParameters = new TokenValidationParameters
-            //     {
-            //         ValidateIssuerSigningKey = true,
-            //         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
-            //         ValidateIssuer = false,
-            //         ValidateAudience = false,
-            //         ValidateLifetime = true,
-            //     };
-            // });
-
+            builder.Services.AddAuthorization();
 
             builder.Services.AddRazorPages();
-
-
-           
+         
             var app = builder.Build();
 
             app.UseCors(x => x
@@ -137,12 +115,12 @@ namespace userInformation
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseAuthorization();
+            
 
             app.UseAuthentication();
 
+            app.UseAuthorization();
 
-            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

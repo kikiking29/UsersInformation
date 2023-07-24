@@ -10,6 +10,7 @@ using MySql.Data.MySqlClient;
 using userInformation.Model;
 using Microsoft.AspNetCore.Authorization;
 using userInformation.Entities;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 //using userInformation.Authorization;
 //using AuthorizeAttribute = userInformation.Authorization.AuthorizeAttribute;
 
@@ -19,9 +20,9 @@ namespace userInformation.Controllers
     public class userInformationCol : ControllerBase
     {
         connecDb conn = new connecDb();
-     
 
-        //[Authorize(Role.Admin)]
+
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("Usersinformation")]
         public List<UsersinforModels> Getusersdataall(){
@@ -52,7 +53,7 @@ namespace userInformation.Controllers
             return users ;
         }
 
-        //[Authorize(Role.Admin)]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("Usersinformation/{id}")]
         public UsersinforModels Getbyusersid(int id)
@@ -86,7 +87,7 @@ namespace userInformation.Controllers
         }
 
 
-        //[Authorize(Role.Admin, Role.User)]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [Route("Usersinformation/item/")]
         public List<Selectwithpagging> Getbyparamforselectwithpagging(Selectwithpagging data)
@@ -140,7 +141,7 @@ namespace userInformation.Controllers
             return users;
         }
 
-        //[Authorize(Role.Admin)]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("Usersinformation/privileage")]
         public List<UsersinforAndPrivileageModels> Getalluserandprivileage()
@@ -181,7 +182,8 @@ namespace userInformation.Controllers
             return uaps;
         }
 
-        //[Authorize(Role.Admin, Role.User)]
+
+        [Authorize(Roles = "Admin,User")]
         [HttpPost]
         [Route("UsersInformation")]
         public NewUsersinforModels Registerusers(NewUsersinforModels data)
@@ -216,7 +218,8 @@ namespace userInformation.Controllers
         }
 
 
-        //[Authorize(Role.Admin, Role.User)]
+
+        [Authorize(Roles = "Admin,User")]
         [HttpPut]
         [Route("UsersInformation/{id}")]
         public UsersinforModels Updateusers(UsersinforModels data)
@@ -227,11 +230,10 @@ namespace userInformation.Controllers
             {
                 MySqlConnection connection = new MySqlConnection(conn.connectDb());
                 connection.Open();
-                string sql = "UPDATE users SET username=@username,passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@password))))),name=@name,status=@status  WHERE usersId=@usersId ;";
+                string sql = "UPDATE users SET username=@username,name=@name,status=@status  WHERE usersId=@usersId ;";
                 MySqlCommand comm = new MySqlCommand(sql, connection);
                 comm.Parameters.AddWithValue("@usersId", data.usersId);
                 comm.Parameters.AddWithValue("@username", data.username);
-                comm.Parameters.AddWithValue("@password", data.password);
                 comm.Parameters.AddWithValue("@name", data.name);
                 comm.Parameters.AddWithValue("@status", data.status);
                 comm.ExecuteNonQuery();
@@ -244,13 +246,13 @@ namespace userInformation.Controllers
             {
                 usersId = data.usersId,
                 username = data.username,
-                password = data.password,
                 name = data.name,
                 status = data.status
             };
         }
 
-        //[Authorize(Role.Admin, Role.User)]
+ 
+        [Authorize(Roles = "Admin,User")]
         [HttpPut]
         [Route("UsersInformation/username/password")]
         public PasswordModels Updatepassword(PasswordModels data)
@@ -278,7 +280,8 @@ namespace userInformation.Controllers
             return new PasswordModels { usersId=pass.usersId, password = data.password };
         }
 
-        //[Authorize(Role.Admin)]
+
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         [Route("UsersInformation/status/Active/{id}")]
         public void upstatusActive(int id)
@@ -295,7 +298,8 @@ namespace userInformation.Controllers
 
         }
 
-        //[Authorize(Role.Admin)]
+
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         [Route("UsersInformation/status/Inactive/{id}")]
         public void upstatusInactive(int id)
@@ -313,7 +317,8 @@ namespace userInformation.Controllers
 
         }
 
-        //[Authorize(Role.Admin)]
+
+        [Authorize(Roles = "Admin")]
         [HttpDelete]
         [Route("UsersInformation/{id}")]
         public void Deleteusers(int id)

@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Authorization\AllowAnonymousAttribute .cs" />
-    <Compile Remove="Authorization\AuthorizeAttribute.cs" />
     <Compile Remove="Controllers\UsersController.cs" />
     <Compile Remove="Controllers\WeatherForecastController.cs" />
     <Compile Remove="Model\UsersModel.cs" />
