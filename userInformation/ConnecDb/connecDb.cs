@@ -79,7 +79,15 @@ namespace userInformation.ConnecDb
             connection.Close();
             if (pau.candrop != "0" )
             {
+                return "SuperAdmin";
+            }
+            else if (pau.candelete != "0")
+            {
                 return "Admin";
+            }
+            else if (pau.canread != "0" && pau.caninsert != "0" && pau.canupdate != "0")
+            {
+                return "PowerUser";
             }
             else
             {

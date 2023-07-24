@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication;
-using userInformation.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace userInformation

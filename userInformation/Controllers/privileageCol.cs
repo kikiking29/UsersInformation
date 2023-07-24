@@ -14,7 +14,7 @@ using userInformation.Entities;
 
 namespace userInformation.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,SuperAdmin")]
     public class privileageCol : ControllerBase
     {
 
