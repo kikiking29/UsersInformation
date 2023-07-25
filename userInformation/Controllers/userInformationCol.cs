@@ -11,6 +11,9 @@ using userInformation.Model;
 using Microsoft.AspNetCore.Authorization;
 using userInformation.Entities;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
+using System.Text.RegularExpressions;
+using Microsoft.Graph;
+using System.Security.Claims;
 //using userInformation.Authorization;
 //using AuthorizeAttribute = userInformation.Authorization.AuthorizeAttribute;
 
@@ -87,40 +90,72 @@ namespace userInformation.Controllers
         }
 
 
-        [Authorize(Roles = "Admin,SuperAdmin,User")]
+        //[Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPost]
         [Route("Usersinformation/item/")]
         public List<Selectwithpagging> Getbyparamforselectwithpagging(Selectwithpagging data)
         {
-            List<Selectwithpagging> users = new List<Selectwithpagging>();
-
+            List<Selectwithpagging>? users = new List<Selectwithpagging>();
+            DataSet ds = new DataSet();
+           
+            
             try
             {
-
-                DataSet ds = new DataSet();
-                var sql = "SELECT * FROM users WHERE TRUE";
-
-                if (data != null)
+                if (data.username != null || data.name != null || data.status!=null )
                 {
-                    if(data.username != null)
+                    var sql = "";
+
+                    if (data.username != null)
                     {
-                        var un = " AND username like '"+ data.username +"%' ";
-                        sql = sql+ un;
+                        if (Regex.Match(data.username.ToString(), @"[a-zA-Z0-9]$").Success)
+                        {
+                            var un = " AND username like '" + data.username + "%' ";
+                            sql = sql + un;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid username");
+                            StatusCode(StatusCodes.Status404NotFound);
+                            sql = null;
+                        }                     
                     }
+
+
                     if (data.name != null)
                     {
-                        var n = " AND name like '" + data.name + "%' ";
-                        sql = sql + n;
+                        if (!Regex.Match(data.name, @"^\\S[a-zA-Z]$").Success)
+                        {
+                            var n = " AND name like '" + data.name + "%' ";
+                            sql = sql + n;
+
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid name");
+                            StatusCode(StatusCodes.Status404NotFound);
+                            sql = null;
+                        }
                     }
+
+
                     if (data.status != null)
                     {
-                        var s = " AND status like '" + data.status + "%' ";
-                        sql = sql +  s;
-                    }
-                }
-                sql = sql + ";";
-                ds = conn.Selectdata(sql);
+                        if (!Regex.Match(data.status, @"[A-Z]$").Success)
+                        {
+                            var s = " AND status like '" + data.status + "%' ";
+                            sql = sql + s;
 
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid status");
+                            StatusCode(StatusCodes.Status404NotFound);
+                            sql = null;
+                        }
+                    }
+
+                    ds = conn.Selectitem(sql);
+                }
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
@@ -138,6 +173,7 @@ namespace userInformation.Controllers
             {
                 Console.WriteLine(ex.Message);
             }
+            
             return users;
         }
 
@@ -183,24 +219,58 @@ namespace userInformation.Controllers
         }
 
 
-        [Authorize(Roles = "Admin,SuperAdmin,PowerUser")]
+        //[Authorize(Roles = "Admin,SuperAdmin,Geust")]
         [HttpPost]
         [Route("UsersInformation")]
         public NewUsersinforModels Registerusers(NewUsersinforModels data)
         {
+            PasswordModels pass = new PasswordModels();
+            connecDb conn = new connecDb();
+
             try
             {
-               
+                
                 MySqlConnection connection = new MySqlConnection(conn.connectDb());
                 connection.Open();
+
                 string sql = "INSERT into users set username=@username,passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@password))))),name=@name,status=@status;";
                 MySqlCommand comm = new MySqlCommand(sql, connection);
-                comm.Parameters.AddWithValue("@username", data.username);
-                comm.Parameters.AddWithValue("@password", data.password);
-                //Console.WriteLine(data.image.Length.ToString());
-                comm.Parameters.AddWithValue("@name", data.name);
+
+
+                if (Regex.Match(data.username.ToString(), @"[a-zA-Z0-9]$").Success)
+                {
+                    comm.Parameters.AddWithValue("@username", data.username);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid username");     
+                }
+
+                if (Regex.Match(data.password.ToString(), @"^[@a-zA-Z0-9]$").Success)
+                {
+                    comm.Parameters.AddWithValue("@password", data.password);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid password");
+                }
+
+
+                if (Regex.Match(data.password.ToString(), @"^[a-zA-Z]*$").Success)
+                {
+                    comm.Parameters.AddWithValue("@name", data.name);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid password");
+                }
+
+
+
+                
                 comm.Parameters.AddWithValue("@status", data.status);
-                //cc.Setdata(sql, comm);
+
+                
                 comm.ExecuteNonQuery();
                 connection.Close();
             }
@@ -208,6 +278,11 @@ namespace userInformation.Controllers
             {
                 Console.WriteLine(ex.Message);
             }
+            pass.username = data.username;
+            pass.old_password = data.password;
+            pass = conn.ChackPassword(pass);
+            string setPrivileage = "INSERT into privileage set usersId='" + pass.usersId + "',canread='0',caninsert='0',canupdate='0',candelete='0',candrop='0';";
+            conn.Setdata(setPrivileage);
             return new NewUsersinforModels
             {
                 username = data.username,
@@ -219,7 +294,7 @@ namespace userInformation.Controllers
 
 
 
-        [Authorize(Roles = "Admin,SuperAdmin,PowerUser")]
+        [Authorize(Roles = "Admin,SuperAdmin,User")]
         [HttpPut]
         [Route("UsersInformation/{id}")]
         public UsersinforModels Updateusers(UsersinforModels data)
@@ -252,7 +327,7 @@ namespace userInformation.Controllers
         }
 
  
-        [Authorize(Roles = "Admin,SuperAdmin,PowerUser")]
+        [Authorize(Roles = "Admin,SuperAdmin,User")]
         [HttpPut]
         [Route("UsersInformation/username/password")]
         public PasswordModels Updatepassword(PasswordModels data)
@@ -264,13 +339,15 @@ namespace userInformation.Controllers
                 pass = conn.ChackPassword(data);
                 MySqlConnection connection = new MySqlConnection(conn.connectDb());
                 connection.Open();
-                string sql = "UPDATE users SET passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@password)))))  WHERE usersId='"+pass.usersId+"' AND passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1('"+data.old_password+"'))))) ;";
+                string sql = "UPDATE users SET passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@password)))))  WHERE usersId=@id AND passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@oldpassword))))) ;";
                 MySqlCommand comm = new MySqlCommand(sql, connection);
                 if(data.recheck_password != data.password)
                 {
                     return new PasswordModels{ password = "Passwords are not the same." };
 
                 }
+                comm.Parameters.AddWithValue("@id", pass.usersId);
+                comm.Parameters.AddWithValue("@oldpassword", data.old_password);
                 comm.Parameters.AddWithValue("@password", data.password);
                 comm.ExecuteNonQuery();
                 connection.Close();

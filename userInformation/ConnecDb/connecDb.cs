@@ -34,6 +34,22 @@ namespace userInformation.ConnecDb
             return ds;
         }
 
+        public DataSet Selectitem(string Sql)
+        {
+            MySqlConnection connection = new MySqlConnection(connectionstring);
+            DataSet ds = new DataSet();
+            connection.Open();
+            if (Sql != null)
+            {
+                var db = "SELECT * FROM users WHERE TRUE";
+                MySqlDataAdapter dap = new MySqlDataAdapter(db + Sql+ ";", connection);
+                dap.Fill(ds);
+            }
+            connection.Close();
+            return ds;
+        }
+
+
         public PasswordModels ChackPassword(PasswordModels data)
         {
             PasswordModels passwrd = new PasswordModels(); 
@@ -87,11 +103,11 @@ namespace userInformation.ConnecDb
             }
             else if (pau.canread != "0" && pau.caninsert != "0" && pau.canupdate != "0")
             {
-                return "PowerUser";
+                return "User";
             }
             else
             {
-                return "User";
+                return "Geust";
             }
           
 

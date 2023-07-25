@@ -212,8 +212,6 @@ namespace userInformation.Controllers
             };
         }
 
-
-        //[Authorize(Role.Admin)]
         [HttpDelete]
         [Route("Privileage/{id}")]
         public void Deleteprivileage(int id)
@@ -229,6 +227,89 @@ namespace userInformation.Controllers
 
 
         }
+
+
+        [Authorize(Roles = "SuperAdmin")]
+        [HttpPut]
+        [Route("Privileage/canread")]
+        public void setCanread(int id)
+        {
+            try
+            {
+                string sql = "UPDATE privileage SET canread='1' WHERE privileageId='" + id + "';";
+
+                conn.Setdata(sql);
+            }
+            catch (Exception ex)
+            { Console.WriteLine(ex.Message); }
+        }
+
+        [Authorize(Roles = "SuperAdmin")]
+        [HttpPut]
+        [Route("Privileage/caninsert")]
+        public void setCaninsert(int id)
+        {
+            try
+            {
+                string sql = "UPDATE privileage SET caninsert='1' WHERE privileageId='" + id + "';";
+
+                conn.Setdata(sql);
+            }
+            catch (Exception ex)
+            { Console.WriteLine(ex.Message); }
+        }
+
+        [Authorize(Roles = "SuperAdmin")]
+        [HttpPut]
+        [Route("Privileage/canupdate")]
+        public void setCanupdate(int id)
+        {
+            try
+            {
+                string sql = "UPDATE privileage SET canupdate='1' WHERE privileageId='" + id + "';";
+
+                conn.Setdata(sql);
+            }
+            catch (Exception ex)
+            { Console.WriteLine(ex.Message); }
+        }
+
+        [Authorize(Roles = "SuperAdmin")]
+        [HttpPut]
+        [Route("Privileage/candelete")]
+        public void setCandelete(int id)
+        {
+            try
+            {
+                string sql = "UPDATE privileage SET candelete='1' WHERE privileageId='" + id + "';";
+
+                conn.Setdata(sql);
+            }
+            catch (Exception ex)
+            { Console.WriteLine(ex.Message); }
+        }
+
+        [Authorize(Roles = "SuperAdmin")]
+        [HttpPut]
+        [Route("Privileage/candrop")]
+        public void setCandrop(int id)
+        {
+            try
+            {
+                string sql = "UPDATE privileage SET candrop='1' WHERE privileageId='" + id + "';";
+
+                conn.Setdata(sql);
+            }
+            catch (Exception ex)
+            { Console.WriteLine(ex.Message); }
+        }
+
+
+        //[Authorize(Role.Admin)]
+     
+
+
+
 
 
 
