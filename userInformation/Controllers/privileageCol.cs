@@ -52,6 +52,7 @@ namespace userInformation.Controllers
             return privileages;
         }
 
+
         //[Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("Privileage/{id}")]
@@ -231,7 +232,7 @@ namespace userInformation.Controllers
 
         [Authorize(Roles = "SuperAdmin")]
         [HttpPut]
-        [Route("Privileage/canread")]
+        [Route("Privileage/canread/{id}")]
         public void setCanread(int id)
         {
             try
@@ -246,7 +247,7 @@ namespace userInformation.Controllers
 
         [Authorize(Roles = "SuperAdmin")]
         [HttpPut]
-        [Route("Privileage/caninsert")]
+        [Route("Privileage/caninsert/{id}")]
         public void setCaninsert(int id)
         {
             try
@@ -261,7 +262,7 @@ namespace userInformation.Controllers
 
         [Authorize(Roles = "SuperAdmin")]
         [HttpPut]
-        [Route("Privileage/canupdate")]
+        [Route("Privileage/canupdate/{id}")]
         public void setCanupdate(int id)
         {
             try
@@ -276,7 +277,7 @@ namespace userInformation.Controllers
 
         [Authorize(Roles = "SuperAdmin")]
         [HttpPut]
-        [Route("Privileage/candelete")]
+        [Route("Privileage/candelete/{id}")]
         public void setCandelete(int id)
         {
             try
@@ -291,7 +292,7 @@ namespace userInformation.Controllers
 
         [Authorize(Roles = "SuperAdmin")]
         [HttpPut]
-        [Route("Privileage/candrop")]
+        [Route("Privileage/candrop/{id}")]
         public void setCandrop(int id)
         {
             try

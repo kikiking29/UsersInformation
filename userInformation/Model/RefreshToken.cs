@@ -1,4 +1,4 @@
-﻿namespace userInformation
+﻿namespace userInformation.Model
 {
     public class RefreshToken
     {

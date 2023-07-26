@@ -56,6 +56,7 @@ namespace userInformation.Controllers
             return users ;
         }
 
+
         [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpGet]
         [Route("Usersinformation/{id}")]
@@ -90,7 +91,7 @@ namespace userInformation.Controllers
         }
 
 
-        //[Authorize(Roles = "Admin,SuperAdmin")]
+        
         [HttpPost]
         [Route("Usersinformation/item/")]
         public List<Selectwithpagging> Getbyparamforselectwithpagging(Selectwithpagging data)
@@ -100,61 +101,37 @@ namespace userInformation.Controllers
            
             
             try
-            {
-                if (data.username != null || data.name != null || data.status!=null )
+            { 
+                if (ModelState.IsValid)
                 {
                     var sql = "";
 
                     if (data.username != null)
                     {
-                        if (Regex.Match(data.username.ToString(), @"[a-zA-Z0-9]$").Success)
-                        {
-                            var un = " AND username like '" + data.username + "%' ";
-                            sql = sql + un;
-                        }
-                        else
-                        {
-                            Console.WriteLine("Invalid username");
-                            StatusCode(StatusCodes.Status404NotFound);
-                            sql = null;
-                        }                     
+                        var un = " AND username like '" + data.username + "%' ";
+                        sql = sql + un; 
                     }
 
 
                     if (data.name != null)
                     {
-                        if (!Regex.Match(data.name, @"^\\S[a-zA-Z]$").Success)
-                        {
-                            var n = " AND name like '" + data.name + "%' ";
-                            sql = sql + n;
-
-                        }
-                        else
-                        {
-                            Console.WriteLine("Invalid name");
-                            StatusCode(StatusCodes.Status404NotFound);
-                            sql = null;
-                        }
+                        var n = " AND name like '" + data.name + "%' ";
+                        sql = sql + n;
+                        
                     }
 
 
                     if (data.status != null)
                     {
-                        if (!Regex.Match(data.status, @"[A-Z]$").Success)
-                        {
-                            var s = " AND status like '" + data.status + "%' ";
-                            sql = sql + s;
-
-                        }
-                        else
-                        {
-                            Console.WriteLine("Invalid status");
-                            StatusCode(StatusCodes.Status404NotFound);
-                            sql = null;
-                        }
+                        var s = " AND status like '" + data.status + "%' ";
+                        sql = sql + s;
                     }
 
                     ds = conn.Selectitem(sql);
+                }
+                else
+                {
+
                 }
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
@@ -176,6 +153,7 @@ namespace userInformation.Controllers
             
             return users;
         }
+
 
         [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpGet]
@@ -233,44 +211,11 @@ namespace userInformation.Controllers
                 MySqlConnection connection = new MySqlConnection(conn.connectDb());
                 connection.Open();
 
-                string sql = "INSERT into users set username=@username,passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@password))))),name=@name,status=@status;";
+                string sql = "INSERT into users set username=@username,passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@password))))),name=@name;";
                 MySqlCommand comm = new MySqlCommand(sql, connection);
-
-
-                if (Regex.Match(data.username.ToString(), @"[a-zA-Z0-9]$").Success)
-                {
-                    comm.Parameters.AddWithValue("@username", data.username);
-                }
-                else
-                {
-                    Console.WriteLine("Invalid username");     
-                }
-
-                if (Regex.Match(data.password.ToString(), @"^[@a-zA-Z0-9]$").Success)
-                {
-                    comm.Parameters.AddWithValue("@password", data.password);
-                }
-                else
-                {
-                    Console.WriteLine("Invalid password");
-                }
-
-
-                if (Regex.Match(data.password.ToString(), @"^[a-zA-Z]*$").Success)
-                {
-                    comm.Parameters.AddWithValue("@name", data.name);
-                }
-                else
-                {
-                    Console.WriteLine("Invalid password");
-                }
-
-
-
-                
-                comm.Parameters.AddWithValue("@status", data.status);
-
-                
+                comm.Parameters.AddWithValue("@username", data.username);
+                comm.Parameters.AddWithValue("@password", data.password);
+                comm.Parameters.AddWithValue("@name", data.name);            
                 comm.ExecuteNonQuery();
                 connection.Close();
             }
@@ -324,6 +269,7 @@ namespace userInformation.Controllers
                 name = data.name,
                 status = data.status
             };
+
         }
 
  
@@ -409,8 +355,6 @@ namespace userInformation.Controllers
             { Console.WriteLine(ex.Message); }
 
         }
-
-
 
     }
 }

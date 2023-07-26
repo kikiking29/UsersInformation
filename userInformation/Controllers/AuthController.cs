@@ -2,7 +2,6 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using userInformation.Model;
-using userInformation;
 using userInformation.Services.UserService;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
@@ -96,7 +95,7 @@ namespace JwtWebApiTutorial.Controllers
             var refreshToken = new RefreshToken
             {
                 Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
-                Expires = DateTime.Now.AddMinutes(5),
+                Expires = DateTime.Now.AddHours(10),
                 Created = DateTime.Now
             };
 
@@ -132,7 +131,7 @@ namespace JwtWebApiTutorial.Controllers
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.Role,  user.Role)
                 },
-                expires: DateTime.Now.AddMinutes(5),
+                expires: DateTime.Now.AddHours(1),
                 signingCredentials: creds);
           
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
