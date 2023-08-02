@@ -50,7 +50,7 @@ namespace userInformation.ConnecDb
         }
 
 
-        public PasswordModels ChackPassword(PasswordModels data)
+        public PasswordModels CheckIduser(PasswordModels data)
         {
             PasswordModels passwrd = new PasswordModels(); 
             MySqlConnection connection = new MySqlConnection(connectionstring);

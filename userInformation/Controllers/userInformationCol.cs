@@ -60,15 +60,16 @@ namespace userInformation.Controllers
         [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpGet]
         [Route("Usersinformation/{id}")]
-        public UsersinforModels Getbyusersid(int id)
+        public UsersinforModels Getbyusersid()
         {
             UsersinforModels user = new UsersinforModels();
             
             try
             {
                 
+
                 DataSet ds = new DataSet();
-                ds = conn.Selectdata("SELECT * FROM users WHERE usersId='"+id+"';");
+                ds = conn.Selectdata("SELECT * FROM users WHERE usersId='"+User.FindFirstValue(ClaimTypes.Sid)+"';");
 
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
@@ -126,12 +127,11 @@ namespace userInformation.Controllers
                         var s = " AND status like '" + data.status + "%' ";
                         sql = sql + s;
                     }
-
-                    ds = conn.Selectitem(sql);
-                }
-                else
-                {
-
+                    if(data.username != null || data.name != null || data.status != null)
+                    {
+                        ds = conn.Selectitem(sql);
+                    }
+                   
                 }
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
@@ -207,27 +207,31 @@ namespace userInformation.Controllers
 
             try
             {
-                
-                MySqlConnection connection = new MySqlConnection(conn.connectDb());
-                connection.Open();
+                if (ModelState.IsValid)
+                {
+                    MySqlConnection connection = new MySqlConnection(conn.connectDb());
+                    connection.Open();
 
-                string sql = "INSERT into users set username=@username,passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@password))))),name=@name;";
-                MySqlCommand comm = new MySqlCommand(sql, connection);
-                comm.Parameters.AddWithValue("@username", data.username);
-                comm.Parameters.AddWithValue("@password", data.password);
-                comm.Parameters.AddWithValue("@name", data.name);            
-                comm.ExecuteNonQuery();
-                connection.Close();
+                    string sql = "INSERT into users set username=@username,passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@password))))),name=@name;";
+                    MySqlCommand comm = new MySqlCommand(sql, connection);
+                    comm.Parameters.AddWithValue("@username", data.username);
+                    comm.Parameters.AddWithValue("@password", data.password);
+                    comm.Parameters.AddWithValue("@name", data.name);
+                    comm.ExecuteNonQuery();
+                    connection.Close();
+
+                    pass.username = data.username;
+                    pass.old_password = data.password;
+                    pass = conn.CheckIduser(pass);
+                    string setPrivileage = "INSERT into privileage set usersId='" + pass.usersId + "',canread='0',caninsert='0',canupdate='0',candelete='0',candrop='0';";
+                    conn.Setdata(setPrivileage);
+                }               
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            pass.username = data.username;
-            pass.old_password = data.password;
-            pass = conn.ChackPassword(pass);
-            string setPrivileage = "INSERT into privileage set usersId='" + pass.usersId + "',canread='0',caninsert='0',canupdate='0',candelete='0',candrop='0';";
-            conn.Setdata(setPrivileage);
+            
             return new NewUsersinforModels
             {
                 username = data.username,
@@ -248,17 +252,22 @@ namespace userInformation.Controllers
             connecDb conn = new connecDb();
             try
             {
-                MySqlConnection connection = new MySqlConnection(conn.connectDb());
-                connection.Open();
-                string sql = "UPDATE users SET username=@username,name=@name,status=@status  WHERE usersId=@usersId ;";
-                MySqlCommand comm = new MySqlCommand(sql, connection);
-                comm.Parameters.AddWithValue("@usersId", data.usersId);
-                comm.Parameters.AddWithValue("@username", data.username);
-                comm.Parameters.AddWithValue("@name", data.name);
-                comm.Parameters.AddWithValue("@status", data.status);
-                comm.ExecuteNonQuery();
-                connection.Close();
+                
 
+                if (ModelState.IsValid)
+                {
+                     
+                    MySqlConnection connection = new MySqlConnection(conn.connectDb());
+                    connection.Open();
+                    string sql = "UPDATE users SET username=@username,name=@name,status=@status  WHERE usersId=@usersId ;";
+                    MySqlCommand comm = new MySqlCommand(sql, connection);
+                    comm.Parameters.AddWithValue("@usersId", User.FindFirstValue(ClaimTypes.Sid).ToString());
+                    comm.Parameters.AddWithValue("@username", User.FindFirstValue(ClaimTypes.Name).ToString());
+                    comm.Parameters.AddWithValue("@name", data.name);
+                    comm.Parameters.AddWithValue("@status", data.status);
+                    comm.ExecuteNonQuery();
+                    connection.Close();
+                }
             }
             catch (Exception ex){Console.WriteLine(ex.Message);}
 
@@ -282,21 +291,23 @@ namespace userInformation.Controllers
             connecDb conn = new connecDb();
             try
             {
-                pass = conn.ChackPassword(data);
-                MySqlConnection connection = new MySqlConnection(conn.connectDb());
-                connection.Open();
-                string sql = "UPDATE users SET passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@password)))))  WHERE usersId=@id AND passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@oldpassword))))) ;";
-                MySqlCommand comm = new MySqlCommand(sql, connection);
-                if(data.recheck_password != data.password)
+                if (ModelState.IsValid)
                 {
-                    return new PasswordModels{ password = "Passwords are not the same." };
+                    MySqlConnection connection = new MySqlConnection(conn.connectDb());
+                    connection.Open();
+                    string sql = "UPDATE users SET passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@password)))))  WHERE usersId=@id AND passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1(@oldpassword))))) ;";
+                    MySqlCommand comm = new MySqlCommand(sql, connection);
+                    if (data.recheck_password != data.password)
+                    {
+                        return new PasswordModels { password = "Passwords are not the same." };
 
-                }
-                comm.Parameters.AddWithValue("@id", pass.usersId);
-                comm.Parameters.AddWithValue("@oldpassword", data.old_password);
-                comm.Parameters.AddWithValue("@password", data.password);
-                comm.ExecuteNonQuery();
-                connection.Close();
+                    }
+                    comm.Parameters.AddWithValue("@id", User.FindFirstValue(ClaimTypes.Sid));
+                    comm.Parameters.AddWithValue("@oldpassword", data.old_password);
+                    comm.Parameters.AddWithValue("@password", data.password);
+                    comm.ExecuteNonQuery();
+                    connection.Close();
+                } 
 
             }
             catch (Exception ex){Console.WriteLine(ex.Message);}

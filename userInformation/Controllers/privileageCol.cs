@@ -141,19 +141,21 @@ namespace userInformation.Controllers
         {
             try
             {
-                
-                MySqlConnection connection = new MySqlConnection(conn.connectDb());
-                connection.Open();
-                string sql = "INSERT into privileage set usersId=@usersId,canread=@canread,caninsert=@caninsert,canupdate=@canupdate,candelete=@candelete,candrop=@candrop;";
-                MySqlCommand comm = new MySqlCommand(sql, connection);
-                comm.Parameters.AddWithValue("@usersId", data.usersId);
-                comm.Parameters.AddWithValue("@canread", data.canread);
-                comm.Parameters.AddWithValue("@caninsert", data.caninsert);
-                comm.Parameters.AddWithValue("@canupdate", data.canupdate);
-                comm.Parameters.AddWithValue("@candelete", data.candelete);
-                comm.Parameters.AddWithValue("@candrop", data.candrop);
-                comm.ExecuteNonQuery();
-                connection.Close();
+                if (ModelState.IsValid)
+                {
+                    MySqlConnection connection = new MySqlConnection(conn.connectDb());
+                    connection.Open();
+                    string sql = "INSERT into privileage set usersId=@usersId,canread=@canread,caninsert=@caninsert,canupdate=@canupdate,candelete=@candelete,candrop=@candrop;";
+                    MySqlCommand comm = new MySqlCommand(sql, connection);
+                    comm.Parameters.AddWithValue("@usersId", data.usersId);
+                    comm.Parameters.AddWithValue("@canread", data.canread);
+                    comm.Parameters.AddWithValue("@caninsert", data.caninsert);
+                    comm.Parameters.AddWithValue("@canupdate", data.canupdate);
+                    comm.Parameters.AddWithValue("@candelete", data.candelete);
+                    comm.Parameters.AddWithValue("@candrop", data.candrop);
+                    comm.ExecuteNonQuery();
+                    connection.Close();
+                }
             }
             catch (Exception ex)
             {
@@ -171,6 +173,8 @@ namespace userInformation.Controllers
         }
 
 
+
+
         //[Authorize(Role.User)]
         [HttpPut]
         [Route("Privileage/{id}")]
@@ -180,21 +184,23 @@ namespace userInformation.Controllers
             connecDb conn = new connecDb();
             try
             {
-
-                MySqlConnection connection = new MySqlConnection(conn.connectDb());
-                connection.Open();
-                string sql = "UPDATE privileage SET usersId=@usersId,canread=@canread,caninsert=@caninsert,canupdate=@canupdate,candelete=@candelete,candrop=@candrop  WHERE privileageId=@privileageId ;";
-                MySqlCommand comm = new MySqlCommand(sql, connection);
-                comm.Parameters.AddWithValue("@privileageId", data.privileageId);
-                comm.Parameters.AddWithValue("@usersId", data.usersId);
-                comm.Parameters.AddWithValue("@canread", data.canread);
-                comm.Parameters.AddWithValue("@caninsert", data.caninsert);
-                comm.Parameters.AddWithValue("@canupdate", data.canupdate);
-                comm.Parameters.AddWithValue("@candelete", data.candelete);
-                comm.Parameters.AddWithValue("@candrop", data.candrop);
-                //cc.Setdata(sql);
-                comm.ExecuteNonQuery();
-                connection.Close();
+                if (ModelState.IsValid)
+                {
+                    MySqlConnection connection = new MySqlConnection(conn.connectDb());
+                    connection.Open();
+                    string sql = "UPDATE privileage SET usersId=@usersId,canread=@canread,caninsert=@caninsert,canupdate=@canupdate,candelete=@candelete,candrop=@candrop  WHERE privileageId=@privileageId ;";
+                    MySqlCommand comm = new MySqlCommand(sql, connection);
+                    comm.Parameters.AddWithValue("@privileageId", data.privileageId);
+                    comm.Parameters.AddWithValue("@usersId", data.usersId);
+                    comm.Parameters.AddWithValue("@canread", data.canread);
+                    comm.Parameters.AddWithValue("@caninsert", data.caninsert);
+                    comm.Parameters.AddWithValue("@canupdate", data.canupdate);
+                    comm.Parameters.AddWithValue("@candelete", data.candelete);
+                    comm.Parameters.AddWithValue("@candrop", data.candrop);
+                    //cc.Setdata(sql);
+                    comm.ExecuteNonQuery();
+                    connection.Close();
+                }
 
             }
             catch (Exception ex)
@@ -212,6 +218,8 @@ namespace userInformation.Controllers
                 candrop = data.candrop,
             };
         }
+
+
 
         [HttpDelete]
         [Route("Privileage/{id}")]

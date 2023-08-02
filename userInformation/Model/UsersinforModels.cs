@@ -8,35 +8,35 @@ namespace userInformation.Model
     public class UsersinforModels
     {
         [Required(ErrorMessage = "UsersId is required")]
-        [RegularExpression(@"[0-9]", ErrorMessage = "Please enter a valid usersId")]
+        [RegularExpression(@"[\s]+|[\d]+", ErrorMessage = "Please enter a valid usersId")]
         public int usersId { get; set; }
 
         [Required(ErrorMessage = "Username is required")]
-        [RegularExpression(@"[a-zA-Z0-9_.@#]|\s", ErrorMessage = "Please enter a valid username")]
-        public string? username { get; set; }
+        [RegularExpression(@"([\s]+|[\w_.@#]+)", ErrorMessage = "Please enter a valid username")]
+        public string? username { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Password is required")]
-        [RegularExpression(@"[a-zA-Z0-9_#@]|\s", ErrorMessage = "Please enter a valid password")]
-        public string? password { get; set; }
+        [RegularExpression(@"([\s]+|[\w_#@]+)", ErrorMessage = "Please enter a valid password")]
+        public string? password { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Name is required")]
-        [RegularExpression(@"[a-zA-Z|\s]", ErrorMessage = "Please enter a valid name")]
-        public string? name { get; set; }
+        [RegularExpression(@"([\s]+|[a-zA-Z]+)", ErrorMessage = "Please enter a valid name")]
+        public string? name { get; set; } = string.Empty;
 
 
         [Required(ErrorMessage = "Status is required")]
-        [RegularExpression(@"[A-Z]|\s", ErrorMessage = "Please enter a valid status")]
-        public string? status { get; set; }
+        [RegularExpression(@"([\s]+|[A-Za-z]+)", ErrorMessage = "Please enter a valid status")]
+        public string? status { get; set; } = string.Empty;
     }
 
     public class PrivileageModels
     {
         [Required(ErrorMessage = "PrivileageId is required")]
-        [RegularExpression(@"[0-9]", ErrorMessage = "Please enter a valid PrivileageId")]
+        [RegularExpression(@"[0-9]+", ErrorMessage = "Please enter a valid PrivileageId")]
         public int privileageId { get; set; }
 
         [Required(ErrorMessage = "UsersId is required")]
-        [RegularExpression(@"[0-9]", ErrorMessage = "Please enter a valid usersId")]
+        [RegularExpression(@"[0-9]+", ErrorMessage = "Please enter a valid usersId")]
         public int usersId { get; set; }
 
         [Required(ErrorMessage = "Canread is Recheckpassword")]
@@ -97,36 +97,35 @@ namespace userInformation.Model
     public class NewUsersinforModels
     {
         [Required(ErrorMessage = "Username is required")]
-        [RegularExpression(@"[a-zA-Z0-9_.@#]", ErrorMessage = "Please enter a valid username")]
+        [RegularExpression(@"[a-zA-Z0-9_.@#]+", ErrorMessage = "Please enter a valid username")]
         public string? username { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
-        [RegularExpression(@"[a-zA-Z0-9_#@]", ErrorMessage = "Please enter a valid password")]
+        [RegularExpression(@"[a-zA-Z0-9_#@]+", ErrorMessage = "Please enter a valid password")]
         public string? password { get; set; }
 
         [Required(ErrorMessage = "Name is required")]
-        [RegularExpression(@"[a-zA-Z]", ErrorMessage = "Please enter a valid name")]
+        [RegularExpression(@"[a-zA-Z]+", ErrorMessage = "Please enter a valid name")]
         public string? name { get; set; }
 
-
-        [Required(ErrorMessage = "Status is required")]
-        [RegularExpression(@"[A-Z]|\s", ErrorMessage = "Please enter a valid status")]
+        
+        //[Required(ErrorMessage = "Status is required")]
+        //[RegularExpression(@"[A-Z]|\s", ErrorMessage = "Please enter a valid status")]
         public string? status { get; set; } 
     }
 
     public class Selectwithpagging
     {
         [Required(ErrorMessage = "Username is required")]
-        [RegularExpression(@"[ a-zA-Z0-9_.@#]+", ErrorMessage = "Please enter a valid username")]
+        [RegularExpression(@"([a-zA-Z0-9_.@#]+)|\s", ErrorMessage = "Please enter a valid username")]
         public string? username { get; set; }
 
-        //[Required(ErrorMessage = "Name is required")]
-        [RegularExpression(@"[\sA-Za-z.]+", ErrorMessage = "Please enter a valid name")]
+        [Required(ErrorMessage = "Name is required")]
+        [RegularExpression(@"([A-Za-z]+)|\s", ErrorMessage = "Please enter a valid name")]
         public string? name { get; set; }
 
-        //[Required(ErrorMessage = "Status is required")]
-        [RegularExpression(@"[\sA-Za-z.]+", ErrorMessage = "Please enter a valid status")]
-        [Required()]
+        [Required(ErrorMessage = "Status is required")]
+        [RegularExpression(@"([A-Za-z]+)|\s", ErrorMessage = "Please enter a valid status")]
         public string? status { get; set; }
     }
    
@@ -159,7 +158,7 @@ namespace userInformation.Model
     {
 
         [Required(ErrorMessage = "UsersId is required")]
-        [RegularExpression(@"[0-9]", ErrorMessage = "Please enter a valid usersId")]
+        [RegularExpression(@"[0-9]+", ErrorMessage = "Please enter a valid usersId")]
         public int usersId { get; set; }
 
         [Required(ErrorMessage = "Canread is Recheckpassword")]

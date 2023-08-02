@@ -42,7 +42,7 @@ namespace JwtWebApiTutorial.Controllers
 
             pass.username = request.Username;
             pass.old_password = request.Password;
-            pass = conn.ChackPassword(pass);
+            pass = conn.CheckIduser(pass);
             user.UserId = pass.usersId;
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
@@ -128,12 +128,15 @@ namespace JwtWebApiTutorial.Controllers
                 claims: new List<Claim> {
                 new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()),
                 new Claim("session", Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Sid, user.UserId.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.Role,  user.Role)
                 },
+
                 expires: DateTime.Now.AddHours(1),
                 signingCredentials: creds);
           
+
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
             return jwt;
