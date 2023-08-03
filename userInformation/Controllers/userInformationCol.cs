@@ -98,6 +98,7 @@ namespace userInformation.Controllers
         public List<Selectwithpagging> Getbyparamforselectwithpagging(Selectwithpagging data)
         {
             List<Selectwithpagging>? users = new List<Selectwithpagging>();
+            Selectwithpagging user = new Selectwithpagging();
             DataSet ds = new DataSet();
            
             
@@ -134,9 +135,9 @@ namespace userInformation.Controllers
                    
                 }
 
-                foreach (DataRow dr in ds.Tables[0].Rows)
+                foreach(DataRow dr in ds.Tables[0].Rows)
                 {
-                    Selectwithpagging user = new Selectwithpagging()
+                    user = new Selectwithpagging()
                     {
                         username = dr["username"].ToString(),
                         name = dr["name"].ToString(),
@@ -150,8 +151,9 @@ namespace userInformation.Controllers
             {
                 Console.WriteLine(ex.Message);
             }
-            
-            return users;
+          
+                return users;    
+           
         }
 
 

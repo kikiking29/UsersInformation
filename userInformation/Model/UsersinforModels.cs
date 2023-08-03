@@ -2,6 +2,7 @@
 using Microsoft.Graph;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace userInformation.Model
 {
@@ -116,16 +117,16 @@ namespace userInformation.Model
 
     public class Selectwithpagging
     {
-        [Required(ErrorMessage = "Username is required")]
-        [RegularExpression(@"([a-zA-Z0-9_.@#]+)|\s", ErrorMessage = "Please enter a valid username")]
+        //[Required(ErrorMessage = "Username is required")]
+        [RegularExpression(@"([\W]|^[a-zA-Z0-9]+)", ErrorMessage = "Please enter a valid username")]
         public string? username { get; set; }
 
-        [Required(ErrorMessage = "Name is required")]
-        [RegularExpression(@"([A-Za-z]+)|\s", ErrorMessage = "Please enter a valid name")]
+        //[Required(ErrorMessage = "Name is required")]
+        [RegularExpression(@"([\W]|^[a-zA-Z]+)", ErrorMessage = "Please enter a valid name")]
         public string? name { get; set; }
 
-        [Required(ErrorMessage = "Status is required")]
-        [RegularExpression(@"([A-Za-z]+)|\s", ErrorMessage = "Please enter a valid status")]
+        //[Required(ErrorMessage = "Status is required")]
+        [RegularExpression(@"([\W]|^[a-zA-Z]+)", ErrorMessage = "Please enter a valid status")]
         public string? status { get; set; }
     }
    
