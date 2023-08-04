@@ -40,10 +40,8 @@ namespace JwtWebApiTutorial.Controllers
         public ActionResult<string> Login(UserDto request)
         {
 
-            pass.username = request.Username;
-            pass.old_password = request.Password;
-            pass = conn.CheckIduser(pass);
-            user.UserId = pass.usersId;
+
+            user.UserId = conn.CheckIduser(request);
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             user.Username = request.Username;

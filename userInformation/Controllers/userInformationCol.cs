@@ -6,6 +6,7 @@ using System.Data;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using static System.Net.Mime.MediaTypeNames;
 using System.Xml.Linq;
+using System.Data.SqlClient;
 using MySql.Data.MySqlClient;
 using userInformation.Model;
 using Microsoft.AspNetCore.Authorization;
@@ -23,7 +24,11 @@ namespace userInformation.Controllers
     public class userInformationCol : ControllerBase
     {
         connecDb conn = new connecDb();
-
+        public class myParam
+        {
+            public string name;
+            public object value;
+        }
 
         [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpGet]
@@ -205,6 +210,7 @@ namespace userInformation.Controllers
         public NewUsersinforModels Registerusers(NewUsersinforModels data)
         {
             PasswordModels pass = new PasswordModels();
+            UserDto userDto = new UserDto();
             connecDb conn = new connecDb();
 
             try
@@ -222,9 +228,9 @@ namespace userInformation.Controllers
                     comm.ExecuteNonQuery();
                     connection.Close();
 
-                    pass.username = data.username;
-                    pass.old_password = data.password;
-                    pass = conn.CheckIduser(pass);
+                    userDto.Username = data.username;
+                    userDto.Password = data.password;
+                    pass.usersId = conn.CheckIduser(userDto);
                     string setPrivileage = "INSERT into privileage set usersId='" + pass.usersId + "',canread='0',caninsert='0',canupdate='0',candelete='0',candrop='0';";
                     conn.Setdata(setPrivileage);
                 }               
@@ -263,7 +269,7 @@ namespace userInformation.Controllers
                     connection.Open();
                     string sql = "UPDATE users SET username=@username,name=@name,status=@status  WHERE usersId=@usersId ;";
                     MySqlCommand comm = new MySqlCommand(sql, connection);
-                    comm.Parameters.AddWithValue("@usersId", User.FindFirstValue(ClaimTypes.Sid).ToString());
+                    comm.Parameters.AddWithValue("@usersId", User.FindFirstValue(ClaimTypes.Sid));
                     comm.Parameters.AddWithValue("@username", User.FindFirstValue(ClaimTypes.Name).ToString());
                     comm.Parameters.AddWithValue("@name", data.name);
                     comm.Parameters.AddWithValue("@status", data.status);
@@ -284,7 +290,7 @@ namespace userInformation.Controllers
         }
 
  
-        [Authorize(Roles = "Admin,SuperAdmin,User")]
+        [Authorize(Roles = "Admin,SuperAdmin,User,Geust")]
         [HttpPut]
         [Route("UsersInformation/username/password")]
         public PasswordModels Updatepassword(PasswordModels data)
@@ -324,8 +330,12 @@ namespace userInformation.Controllers
         {
             try
             {
-
-                string sql = "UPDATE users SET status='Active' WHERE usersId='" + id + "';";
+                myParam uId = new myParam
+                {
+                    name = "@id",
+                    value = id
+                };
+                string sql = $"UPDATE users SET status='Active' WHERE usersId={uId.value};";
 
                 conn.Setdata(sql);
             }
@@ -340,11 +350,15 @@ namespace userInformation.Controllers
         [Route("UsersInformation/status/Inactive/{id}")]
         public void upstatusInactive(int id)
         {
-         
             try
             {
+                myParam uId = new myParam
+                {
+                    name = "@id",
+                    value = id
+                };
 
-                string sql = "UPDATE users SET status='Inactive' WHERE usersId='" + id + "';";
+                string sql = $"UPDATE users SET status='Inactive' WHERE usersId={uId.value};";
 
                 conn.Setdata(sql);
             }
@@ -361,7 +375,12 @@ namespace userInformation.Controllers
         {
             try
             {
-                string sql = "UPDATE users SET status='DELETE' WHERE usersId='"+id+"';";
+                myParam uId = new myParam
+                {
+                    name = "@id",
+                    value = id
+                };
+                string sql = $"UPDATE users SET status='DELETE' WHERE usersId={uId.value};";
                 conn.Setdata(sql);
             }
             catch (Exception ex)

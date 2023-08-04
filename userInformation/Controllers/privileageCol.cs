@@ -65,7 +65,7 @@ namespace userInformation.Controllers
             {
                 
                 DataSet ds = new DataSet();
-                ds = conn.Selectdata("SELECT * FROM privileage WHERE privileageId='" + id+"';");
+                ds = conn.Selectdata("SELECT * FROM privileage WHERE privileageId='" +id+"';");
 
 
                 foreach (DataRow dr in ds.Tables[0].Rows)

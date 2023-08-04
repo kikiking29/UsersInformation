@@ -50,24 +50,24 @@ namespace userInformation.ConnecDb
         }
 
 
-        public PasswordModels CheckIduser(PasswordModels data)
+        public int CheckIduser(UserDto data)
         {
+            int id = 0;
             PasswordModels passwrd = new PasswordModels(); 
             MySqlConnection connection = new MySqlConnection(connectionstring);
             DataSet ds = new DataSet();
             connection.Open();
-            string Sql = "SELECT usersId FROM users where username='"+data.username+"'AND passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1('"+data.old_password+"')))));";
+            string Sql = "SELECT usersId FROM users where username='"+data.Username+ "'AND passwrd=CONCAT('*', UPPER(SHA1(UNHEX(SHA1('"+data.Password+ "')))));";
             MySqlDataAdapter dap = new MySqlDataAdapter(Sql, connection);
             dap.Fill(ds);
             foreach (DataRow dr in ds.Tables[0].Rows)
             {
-                passwrd = new PasswordModels()
-                {
-                    usersId = int.Parse(dr["usersId"].ToString()),
-                };
+              
+                    id = int.Parse(dr["usersId"].ToString());
+                
             }
             connection.Close();
-            return passwrd;
+            return id;
         }
 
         public string Getrole (int id)
